@@ -14,6 +14,8 @@ sub _init
 	$self->{nodesNames} = 'issues/issue';
 	$self->{elemName} = 'issue';
 
+	$self->{url}->query_param(status_id => '*'); #by default redmine passes only open queries. Destination of this module is statistics and reports, so we need all issues mostly. Fuck processor time economy!
+
 }
 
 sub _updateList

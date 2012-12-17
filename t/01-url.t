@@ -1,7 +1,7 @@
 use strict;
 use warnings;
 
-use Test::More tests => 3;
+use Test::More tests => 4;
 
 use Redmine::KPI::Query::Projects;
 
@@ -30,3 +30,10 @@ my $i = Redmine::KPI::Element::Issue->new(
 
 is($i->{url}->as_string, 'https://redmine.shogo.ru/issues/100500.xml?include=children%2Crelations%2Cchangesets', 'Autosetting url in elements children');
 
+
+use Redmine::KPI::Query::Issues;
+$i = Redmine::KPI::Query::Issues->new(
+	url	=> 'https://redmine.shogo.ru',
+	dryRun	=> 1,
+);
+is($i->{url}->as_string, 'https://redmine.shogo.ru/issues.xml?limit=100&status_id=%2A', 'Autosetting issues query url');
