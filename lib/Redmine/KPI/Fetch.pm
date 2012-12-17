@@ -1,7 +1,7 @@
 package Redmine::KPI::Fetch;
 use Badger::Class base => 'Class::Singleton';
 use File::Slurp;
-
+use Carp;
 
 sub fetch
 {
@@ -15,15 +15,20 @@ sub fetch
 			'X-Redmine-API-Key' => $apiKey,
 		);
 		my $r = $ua->get($whatToFetch->as_string);
-		$self->error($r->status_line) if($r->is_error);
+		$self->error($r->status_line, $whatToFetch) if($r->is_error);
 		return $r->content;
 	}
 	else
 	{
 		$self->error("There is no such file: '$whatToFetch'") if not -e $whatToFetch;
-		my $f = read_file($whatToFetch) or $self->fatal('Could not fetch file!');
+		my $f = read_file($whatToFetch) or $self->error('Could not fetch file!', $whatToFetch);
 		return $f;
 	}
+}
+sub error
+{
+	my $self = shift;
+	confess "$_[0] at url '$_[1]";
 }
 
 1;
