@@ -24,7 +24,7 @@ if ( not length $url or not length $auth_key or not length $query_id)
 }
 else
 {
-	plan tests => 15;
+	plan tests => 16;
 #	plan skip_all => 'Temporary disabled';
 }
 
@@ -146,4 +146,15 @@ $p = Redmine::KPI::Query::Projects->new(
 );
 
 $p = $p->list->{$TEST_PRJ_ID};
-is($p->timeEntries(period => ['2012-12-04', '2012-12-05'])->totalTime, $totalTimeForTwoDaysWithRounding, 'Check fetching time entries for period')
+is($p->timeEntries(period => ['2012-12-04', '2012-12-05'])->totalTime, $totalTimeForTwoDaysWithRounding, 'Check fetching time entries for period');
+
+use Redmine::KPI::Element::User;
+
+my $u = Redmine::KPI::Element::User->new(
+	id	=> 6,
+	url	=> $url,
+	authKey	=> $auth_key,
+);
+
+is($u->timeEntries(period => '2012-12-17')->totalTime, 7.15, 'Fetching user time activity by day');
+

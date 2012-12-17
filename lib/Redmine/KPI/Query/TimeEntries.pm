@@ -4,7 +4,7 @@ use Badger::Class
 	methods	=> {
 		_limit		=> sub{1000},
 		_getUrl		=> sub{'time_entries.xml'},
-		_stdFilters	=> sub{qw/tracker project issue activity/},
+		_stdFilters	=> sub{qw/tracker project issue activity user/},
 	},
 ;
 use POSIX qw /ceil/;
