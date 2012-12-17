@@ -1,0 +1,303 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<time_entries type="array" limit="25" total_count="4566" offset="0">
+  <time_entry>
+    <id>4597</id>
+    <project name="pool-galaxy.ru" id="22"/>
+    <issue id="1159"/>
+    <user name="dev1" id="26"/>
+    <activity name="Разработка" id="9"/>
+    <hours>0.5</hours>
+    <comments/>
+    <spent_on>2012-12-05</spent_on>
+    <created_on>2012-12-05T12:41:48+04:00</created_on>
+    <updated_on>2012-12-05T12:41:48+04:00</updated_on>
+  </time_entry>
+  <time_entry>
+    <id>4596</id>
+    <project name="jacks.ru" id="16"/>
+    <issue id="3408"/>
+    <user name="dev1" id="26"/>
+    <activity name="Разработка" id="9"/>
+    <hours>1.0</hours>
+    <comments>Доработки по комментарию</comments>
+    <spent_on>2012-12-05</spent_on>
+    <created_on>2012-12-05T12:40:34+04:00</created_on>
+    <updated_on>2012-12-05T12:40:34+04:00</updated_on>
+  </time_entry>
+  <time_entry>
+    <id>4595</id>
+    <project name="jacks.ru" id="16"/>
+    <issue id="3405"/>
+    <user name="dev1" id="26"/>
+    <activity name="Разработка" id="9"/>
+    <hours>0.5</hours>
+    <comments/>
+    <spent_on>2012-12-05</spent_on>
+    <created_on>2012-12-05T12:32:43+04:00</created_on>
+    <updated_on>2012-12-05T12:32:43+04:00</updated_on>
+  </time_entry>
+  <time_entry>
+    <id>4594</id>
+    <project name="sklad.sportiv" id="1"/>
+    <issue id="3458"/>
+    <user name="dev2" id="12"/>
+    <activity name="Разработка" id="9"/>
+    <hours>0.17</hours>
+    <comments/>
+    <spent_on>2012-12-05</spent_on>
+    <created_on>2012-12-05T12:32:02+04:00</created_on>
+    <updated_on>2012-12-05T12:32:02+04:00</updated_on>
+  </time_entry>
+  <time_entry>
+    <id>4593</id>
+    <project name="Rosdver.ru" id="51"/>
+    <issue id="3448"/>
+    <user name="html2" id="54"/>
+    <activity name="Верстка" id="11"/>
+    <hours>1.0</hours>
+    <comments/>
+    <spent_on>2012-12-05</spent_on>
+    <created_on>2012-12-05T12:24:43+04:00</created_on>
+    <updated_on>2012-12-05T12:24:43+04:00</updated_on>
+  </time_entry>
+  <time_entry>
+    <id>4592</id>
+    <project name="Gidromarket.ru" id="75"/>
+    <issue id="3108"/>
+    <user name="dev3" id="53"/>
+    <activity name="Разработка" id="9"/>
+    <hours>2.0</hours>
+    <comments/>
+    <spent_on>2012-12-05</spent_on>
+    <created_on>2012-12-05T12:07:48+04:00</created_on>
+    <updated_on>2012-12-05T12:07:48+04:00</updated_on>
+  </time_entry>
+  <time_entry>
+    <id>4591</id>
+    <project name="intensor" id="44"/>
+    <issue id="3453"/>
+    <user name="design2" id="18"/>
+    <activity name="Дизайн" id="8"/>
+    <hours>1.0</hours>
+    <comments/>
+    <spent_on>2012-12-05</spent_on>
+    <created_on>2012-12-05T11:49:05+04:00</created_on>
+    <updated_on>2012-12-05T11:49:05+04:00</updated_on>
+  </time_entry>
+  <time_entry>
+    <id>4590</id>
+    <project name="sklad.sportiv" id="1"/>
+    <issue id="3395"/>
+    <user name="qa1" id="10"/>
+    <activity name="Тестирование" id="13"/>
+    <hours>2.5</hours>
+    <comments/>
+    <spent_on>2012-12-05</spent_on>
+    <created_on>2012-12-05T11:41:43+04:00</created_on>
+    <updated_on>2012-12-05T11:41:43+04:00</updated_on>
+  </time_entry>
+  <time_entry>
+    <id>4589</id>
+    <project name="intensor" id="44"/>
+    <issue id="3253"/>
+    <user name="dev5" id="37"/>
+    <activity name="Верстка" id="11"/>
+    <hours>0.15</hours>
+    <comments/>
+    <spent_on>2012-12-05</spent_on>
+    <created_on>2012-12-05T11:31:42+04:00</created_on>
+    <updated_on>2012-12-05T11:31:42+04:00</updated_on>
+  </time_entry>
+  <time_entry>
+    <id>4588</id>
+    <project name="Gidromarket.ru" id="75"/>
+    <issue id="3442"/>
+    <user name="dev3" id="53"/>
+    <activity name="Разработка" id="9"/>
+    <hours>1.5</hours>
+    <comments/>
+    <spent_on>2012-12-05</spent_on>
+    <created_on>2012-12-05T10:17:02+04:00</created_on>
+    <updated_on>2012-12-05T10:17:02+04:00</updated_on>
+  </time_entry>
+  <time_entry>
+    <id>4587</id>
+    <project name="intensor" id="44"/>
+    <issue id="3444"/>
+    <user name="design1" id="49"/>
+    <activity name="Дизайн" id="8"/>
+    <hours>0.2</hours>
+    <comments/>
+    <spent_on>2012-12-05</spent_on>
+    <created_on>2012-12-05T10:12:42+04:00</created_on>
+    <updated_on>2012-12-05T10:12:42+04:00</updated_on>
+  </time_entry>
+  <time_entry>
+    <id>4586</id>
+    <project name="sklad.sportiv" id="1"/>
+    <issue id="3389"/>
+    <user name="qa1" id="10"/>
+    <activity name="Тестирование" id="13"/>
+    <hours>0.1</hours>
+    <comments/>
+    <spent_on>2012-12-05</spent_on>
+    <created_on>2012-12-05T09:49:26+04:00</created_on>
+    <updated_on>2012-12-05T09:49:26+04:00</updated_on>
+  </time_entry>
+  <time_entry>
+    <id>4585</id>
+    <project name="sklad.sportiv" id="1"/>
+    <issue id="3386"/>
+    <user name="qa1" id="10"/>
+    <activity name="Тестирование" id="13"/>
+    <hours>0.1</hours>
+    <comments/>
+    <spent_on>2012-12-05</spent_on>
+    <created_on>2012-12-05T09:31:57+04:00</created_on>
+    <updated_on>2012-12-05T09:31:57+04:00</updated_on>
+  </time_entry>
+  <time_entry>
+    <id>4584</id>
+    <project name="sklad.sportiv" id="1"/>
+    <issue id="3386"/>
+    <user name="qa1" id="10"/>
+    <activity name="Тестирование" id="13"/>
+    <hours>0.2</hours>
+    <comments/>
+    <spent_on>2012-12-05</spent_on>
+    <created_on>2012-12-05T09:26:39+04:00</created_on>
+    <updated_on>2012-12-05T09:26:39+04:00</updated_on>
+  </time_entry>
+  <time_entry>
+    <id>4583</id>
+    <project name="sklad.sportiv" id="1"/>
+    <issue id="3389"/>
+    <user name="qa1" id="10"/>
+    <activity name="Тестирование" id="13"/>
+    <hours>0.3</hours>
+    <comments/>
+    <spent_on>2012-12-05</spent_on>
+    <created_on>2012-12-05T09:17:42+04:00</created_on>
+    <updated_on>2012-12-05T09:17:42+04:00</updated_on>
+  </time_entry>
+  <time_entry>
+    <id>4582</id>
+    <project name="shogocms" id="7"/>
+    <issue id="3221"/>
+    <user name="dev4" id="3"/>
+    <activity name="Разработка" id="9"/>
+    <hours>8.0</hours>
+    <comments/>
+    <spent_on>2012-12-05</spent_on>
+    <created_on>2012-12-05T09:12:35+04:00</created_on>
+    <updated_on>2012-12-05T09:12:35+04:00</updated_on>
+  </time_entry>
+  <time_entry>
+    <id>4581</id>
+    <project name="shogocms" id="7"/>
+    <issue id="3221"/>
+    <user name="dev4" id="3"/>
+    <activity name="Разработка" id="9"/>
+    <hours>6.0</hours>
+    <comments/>
+    <spent_on>2012-12-05</spent_on>
+    <created_on>2012-12-05T09:12:17+04:00</created_on>
+    <updated_on>2012-12-05T09:12:17+04:00</updated_on>
+  </time_entry>
+  <time_entry>
+    <id>4580</id>
+    <project name="Rosdver.ru" id="51"/>
+    <issue id="3448"/>
+    <user name="design1" id="49"/>
+    <activity name="Дизайн" id="8"/>
+    <hours>0.5</hours>
+    <comments/>
+    <spent_on>2012-12-04</spent_on>
+    <created_on>2012-12-04T19:25:49+04:00</created_on>
+    <updated_on>2012-12-04T19:25:49+04:00</updated_on>
+  </time_entry>
+  <time_entry>
+    <id>4579</id>
+    <project name="Cube" id="101"/>
+    <issue id="3447"/>
+    <user name="qa1" id="10"/>
+    <activity name="Саппорт" id="14"/>
+    <hours>0.7</hours>
+    <comments/>
+    <spent_on>2012-12-04</spent_on>
+    <created_on>2012-12-04T18:29:30+04:00</created_on>
+    <updated_on>2012-12-04T18:29:30+04:00</updated_on>
+  </time_entry>
+  <time_entry>
+    <id>4578</id>
+    <project name="bike-salon.ru" id="8"/>
+    <issue id="3217"/>
+    <user name="Макс Миллер" id="20"/>
+    <activity name="Контент" id="12"/>
+    <hours>6.0</hours>
+    <comments/>
+    <spent_on>2012-12-04</spent_on>
+    <created_on>2012-12-04T18:06:57+04:00</created_on>
+    <updated_on>2012-12-04T18:06:57+04:00</updated_on>
+  </time_entry>
+  <time_entry>
+    <id>4577</id>
+    <project name="Cube" id="101"/>
+    <issue id="3413"/>
+    <user name="dev5" id="37"/>
+    <activity name="Верстка" id="11"/>
+    <hours>6.0</hours>
+    <comments/>
+    <spent_on>2012-12-04</spent_on>
+    <created_on>2012-12-04T18:04:00+04:00</created_on>
+    <updated_on>2012-12-04T18:04:00+04:00</updated_on>
+  </time_entry>
+  <time_entry>
+    <id>4576</id>
+    <project name="Winter.sportiv.ru" id="97"/>
+    <issue id="3360"/>
+    <user name="design1" id="49"/>
+    <activity name="Дизайн" id="8"/>
+    <hours>4.0</hours>
+    <comments/>
+    <spent_on>2012-12-04</spent_on>
+    <created_on>2012-12-04T18:03:24+04:00</created_on>
+    <updated_on>2012-12-04T18:03:24+04:00</updated_on>
+  </time_entry>
+  <time_entry>
+    <id>4575</id>
+    <project name="kazanchik.ru" id="92"/>
+    <issue id="3139"/>
+    <user name="content1" id="31"/>
+    <activity name="Контент" id="12"/>
+    <hours>2.6</hours>
+    <comments/>
+    <spent_on>2012-12-04</spent_on>
+    <created_on>2012-12-04T18:02:21+04:00</created_on>
+    <updated_on>2012-12-04T18:02:21+04:00</updated_on>
+  </time_entry>
+  <time_entry>
+    <id>4574</id>
+    <project name="Winter.sportiv.ru" id="97"/>
+    <issue id="3345"/>
+    <user name="dev6" id="6"/>
+    <activity name="Разработка" id="9"/>
+    <hours>7.3</hours>
+    <comments/>
+    <spent_on>2012-12-04</spent_on>
+    <created_on>2012-12-04T17:58:45+04:00</created_on>
+    <updated_on>2012-12-04T17:58:45+04:00</updated_on>
+  </time_entry>
+  <time_entry>
+    <id>4573</id>
+    <project name="konaworld.ru" id="81"/>
+    <issue id="3428"/>
+    <user name="dev7" id="16"/>
+    <activity name="Разработка" id="9"/>
+    <hours>0.89</hours>
+    <comments/>
+    <spent_on>2012-12-04</spent_on>
+    <created_on>2012-12-04T17:54:54+04:00</created_on>
+    <updated_on>2012-12-04T17:54:54+04:00</updated_on>
+  </time_entry>
+</time_entries>
