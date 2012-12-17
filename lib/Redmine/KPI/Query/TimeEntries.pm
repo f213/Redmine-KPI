@@ -61,8 +61,8 @@ sub _init
 	}
 	if($self->{config}{period})
 	{
-		#some note about 'date' magic: when we use Class::Date date('2012-12-21') is equal to date(date('2012-12-21')) so user can pass scalar parsable date or instance of Class::Date object
-		if(ref($self->{config}{period}) eq 'ARRAY') #double dates given
+		# some note about 'date' magic: when we use Class::Date date('2012-12-21') is equal to date(date('2012-12-21')) so user can pass scalar parsable date or instance of Class::Date object
+		if(ref($self->{config}{period}) eq 'ARRAY') # double dates given
 		{
 			our @period = @{ $self->{config}{period} };
 			$self->_addFilter(
@@ -77,7 +77,7 @@ sub _init
 
 		}
 		else
-		{ #single date given - scalar or instance of Class::Date
+		{ # single date given - scalar or instance of Class::Date
 			$self->_addFilter(
 				local	=> 'spentOn',
 				value	=> $self->{config}{period},
@@ -85,7 +85,7 @@ sub _init
 		}
 
 	}
-	if($self->{config}{activity})
+	if($self->{config}{activity}) # activity may be passed by id or by name. We compare by name through regex for case-insensibility.
 	{
 		if($self->{config}{activity}=~/^\d+$/) #actvityId
 		{
@@ -99,11 +99,7 @@ sub _init
 			our $name = $self->{config}{activity};
 			$self->_addFilter(
 				local	=> 'activity/name',
-				value	=> sub
-					{
-						return 1 if($_[0] =~ /^$name$/i);
-						0;
-					}
+				value	=> sub { $_[0] =~ /^$name$/i ? return 1 : return 0},
 			);
 		}
 	}
