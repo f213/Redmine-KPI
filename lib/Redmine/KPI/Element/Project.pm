@@ -11,7 +11,7 @@ sub __queryFactory
 { #this method is designed to add self id to the child query, because i want to write less code above, and dont know anything about parent:: in perl
 	my $self = shift;
 	return $self->_queryFactory(shift,
-		projectId	=> $self->param('id'),
+		project		=> $self->param('id'),
 		@_,
 	);
 }

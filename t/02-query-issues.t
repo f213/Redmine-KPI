@@ -15,14 +15,14 @@ undef $q;
 
 $q =  Redmine::KPI::Query::Issues->new(
 	xml => 't/fixtures/issues.xml',
-	projectId => 50,
+	project => 50,
 );
 
 is($q->count, 6, 'Fetching issues by project');
 
 $q = Redmine::KPI::Query::Issues->new(
 	xml => 't/fixtures/issues.xml',
-	trackerId => 3,
+	tracker => 3,
 );
 
 is($q->count, 5, 'Fetching issues by tracker');

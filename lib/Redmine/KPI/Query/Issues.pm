@@ -2,7 +2,8 @@ package Redmine::KPI::Query::Issues;
 use Badger::Class
 	base	=> 'Redmine::KPI::Query::Base',
 	methods	=> {
-		_getUrl	=> 'issues.xml',
+		_getUrl		=> sub{'issues.xml'},
+		_stdFilters	=> sub{qw /project tracker/},
 	},
 ;
 
@@ -13,24 +14,6 @@ sub _init
 	$self->{nodesNames} = 'issues/issue';
 	$self->{elemName} = 'issue';
 
-	if($self->{config}{projectId})
-	{
-		$self->_addFilter(
-				get	=> 'project_id',
-				local => 'project/id',
-				value	=> $self->{config}{projectId},
-		);
-	}
-	if($self->{config}{trackerId})
-	{
-		$self->_addFilter(
-				get	=> 'tracker_id',
-				local	=> 'tracker/id',
-				value	=> $self->{config}{trackerId},
-		);
-	}
-
-	1;
 }
 
 sub _updateList

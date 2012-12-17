@@ -15,7 +15,7 @@ undef $q;
 
 $q =  Redmine::KPI::Query::TimeEntries->new(
 	xml => 't/fixtures/time_entries.xml',
-	projectId	=> 1,
+	project	=> 1,
 );
 is($q->count, 6, 'Fetching time entries by project');
 
@@ -27,7 +27,7 @@ is($q->totalTime, 3.37, 'Count total hours');
 
 $q = Redmine::KPI::Query::TimeEntries->new(
 	xml => 't/fixtures/time_entries.xml',
-	projectId       => 1,
+	project       => 1,
 	roundHours	=> 1,
 );
 
@@ -35,7 +35,7 @@ is($q->totalTime, 8, 'Count total hours with rounding');
 
 $q = Redmine::KPI::Query::TimeEntries->new(
 	xml => 't/fixtures/time_entries.xml',
-	projectId       => 1,
+	project       => 1,
 	minHours	=> 2,
 );
 is($q->totalTime, 12.5, 'Count total hours with minHours');

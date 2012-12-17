@@ -24,8 +24,8 @@ if ( not length $url or not length $auth_key or not length $query_id)
 }
 else
 {
-	#plan tests => 13;
-	plan skip_all => 'Temporary disabled';
+	plan tests => 13;
+#	plan skip_all => 'Temporary disabled';
 }
 
 
@@ -42,14 +42,14 @@ use Redmine::KPI::Query::Issues;
 $q = Redmine::KPI::Query::Issues->new(
 	url		=> $url,
 	authKey		=> $auth_key,
-	projectId	=> 8,
+	project		=> 8,
 );
 my $firstProjectIssuesCount = $q->count;
 
 $q = Redmine::KPI::Query::Issues->new(
 	url		=> $url,
 	authKey		=> $auth_key,
-	projectId	=> 25,
+	project		=> 25,
 );
 diag("Got $firstProjectIssuesCount from first project, ".$q->count." from second project");
 cmp_ok($q->count, 'ne' , $firstProjectIssuesCount, 'Test filtering issues by project. Fetching issue list for two different projects, they must by not equal');
@@ -57,8 +57,8 @@ cmp_ok($q->count, 'ne' , $firstProjectIssuesCount, 'Test filtering issues by pro
 $q = Redmine::KPI::Query::Issues->new(
 	url		=> $url,
 	authKey		=> $auth_key,
-	projectId	=> 8,
-	trackerId	=> 1,
+	project		=> 8,
+	tracker		=> 1,
 );
 diag("Got $firstProjectIssuesCount total issues, ".$q->count." issues with tracker_id == 1");
 cmp_ok($q->count, '<', $firstProjectIssuesCount, 'Test filtering issues by tracker. There must by less Issues with certain tracker, then total issues');
@@ -67,7 +67,7 @@ cmp_ok($q->count, '<', $firstProjectIssuesCount, 'Test filtering issues by track
 $q = Redmine::KPI::Query::Issues->new(
 	url		=> $url,
 	authKey		=> $auth_key,
-	projectId	=> 1,
+	project		=> 1,
 );
 
 my $i = $q->list->{$TEST_TASK_ID};

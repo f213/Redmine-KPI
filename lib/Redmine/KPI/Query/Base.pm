@@ -9,6 +9,7 @@ use Badger::Class
 		_init		=> sub {1},	#custom subclass initialisation: set node names, filters etc.	
 		_limit		=> sub {100},	#custom subclass query limit, might be more than 100, e.g. for TimeEntries. NOTE - needs modifications in redmine core
 		_updateList	=> sub {1},	#subclass method to add custom parameters from xml
+		_stdFilters	=> sub {()},
 	},
 ;
 
@@ -37,9 +38,14 @@ sub init
 	$self->{url}->query_param(limit	=> $limit);
 
 	$self->{elemFactory} = new Redmine::KPI::Element::Factory;
+	
+	foreach($self->_stdFilters)
+	{
+		$self->_addStdFilter($_, $self->{config}{$_}) if exists $self->{config}{$_};
+	}
 
 	$self->_init() or $self->error("Couldn't do class initialisation");
-
+	
 	$self->query() if not exists $self->{config}{dryRun} or not $self->{config}{dryRun};
 
 	return $self;
@@ -178,6 +184,29 @@ sub _elementFactory
 		@_,
 	);
 }
+sub _addStdFilter
+{
+	my $self = shift;
+	my $var = shift;
+	our $val = shift;
 
+	if($val =~ /^\d+$/) #by id
+	{
+		$self->_addFilter(
+			local	=> "$var/id",
+			value	=> $val,
+			get	=> "$var\_id",
+			@_,
+		);
+	}
+	else
+	{
+		$self->_addFilter(
+			local	=> "$var/name",
+			value	=> sub { $_[0] =~ /^$val$/i ? 1 : 0 },
+			@_,
+		);
+	}
+}
 
 1;	

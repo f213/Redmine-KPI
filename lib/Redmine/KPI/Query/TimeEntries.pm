@@ -2,8 +2,9 @@ package Redmine::KPI::Query::TimeEntries;
 use Badger::Class
 	base	=> 'Redmine::KPI::Query::Base',
 	methods	=> {
-		_limit	=> sub{1000},
-		_getUrl	=> sub{'time_entries.xml'},
+		_limit		=> sub{1000},
+		_getUrl		=> sub{'time_entries.xml'},
+		_stdFilters	=> sub{qw/tracker project issue activity/},
 	},
 ;
 use POSIX qw /ceil/;
@@ -27,38 +28,6 @@ sub _init
 	$self->{nodesNames} = 'time_entries/time_entry';
 	$self->{elemName} = 'timeEntry';
 
-	if($self->{config}{projectId})
-	{
-		$self->_addFilter(
-				get	=> 'project_id',
-				local => 'project/id',
-				value	=> $self->{config}{projectId},
-		);
-	}
-	if($self->{config}{trackerId})
-	{
-		$self->_addFilter(
-				get	=> 'tracker_id',
-				local	=> 'tracker/id',
-				value	=> $self->{config}{trackerId},
-		);
-	}
-	if($self->{config}{issueId})
-	{
-		$self->_addFilter(
-				get	=> 'issue_id',
-				local	=> 'issue/id',
-				value	=> $self->{config}{issueId},
-		);
-	}
-	if($self->{config}{userId})
-	{
-		$self->_addFilter(
-				get	=> 'user_id',
-				local	=> 'user/id',
-				value	=> $self->{config}{userId},
-		);
-	}
 	if($self->{config}{period})
 	{
 		# some note about 'date' magic: when we use Class::Date date('2012-12-21') is equal to date(date('2012-12-21')) so user can pass scalar parsable date or instance of Class::Date object
@@ -84,24 +53,6 @@ sub _init
 			);
 		}
 
-	}
-	if($self->{config}{activity}) # activity may be passed by id or by name. We compare by name through regex for case-insensibility.
-	{
-		if($self->{config}{activity}=~/^\d+$/) #actvityId
-		{
-			$self->_addFilter(
-				local	=> 'activity/id',
-				value	=> $self->{config}{activity},
-			);
-		}
-		else
-		{
-			our $name = $self->{config}{activity};
-			$self->_addFilter(
-				local	=> 'activity/name',
-				value	=> sub { $_[0] =~ /^$name$/i ? return 1 : return 0},
-			);
-		}
 	}
 	1;
 }
@@ -161,6 +112,7 @@ sub __addStdParam
 		)
 	);
 }
+
 
 
 1;
