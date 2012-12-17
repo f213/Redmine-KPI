@@ -4,6 +4,7 @@ use Badger::Class
 	methods	=> {
 		_paramsToFetch	=> sub { qw /login firstname lastname mail/ },
 		timeEntries	=> sub { shift->__queryFactory('timeEntries', @_) },
+		issues		=> sub { my $self = shift; $self->_queryFactory('issues', author => $self->param('id'), @_) },
 	},
 ;
 

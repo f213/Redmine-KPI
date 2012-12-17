@@ -24,7 +24,7 @@ if ( not length $url or not length $auth_key or not length $query_id)
 }
 else
 {
-	plan tests => 16;
+	plan tests => 17;
 #	plan skip_all => 'Temporary disabled';
 }
 
@@ -158,3 +158,12 @@ my $u = Redmine::KPI::Element::User->new(
 
 is($u->timeEntries(period => '2012-12-17')->totalTime, 7.15, 'Fetching user time activity by day');
 
+undef $u;
+$u = Redmine::KPI::Element::User->new(
+	id	=> 14,
+	url	=> $url,
+	authKey	=> $auth_key,
+);
+
+is($u->issues(period => ['2012-12-12', '2012-12-18'])->count, 25, 'Fetching user-created issues by period');
+diag($u->issues->{url});
