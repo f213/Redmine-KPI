@@ -9,7 +9,7 @@ use Badger::Class
 		_init		=> sub {1},	#custom subclass initialisation: set node names, filters etc.	
 		_limit		=> sub {100},	#custom subclass query limit, might be more than 100, e.g. for TimeEntries. NOTE - needs modifications in redmine core
 		_updateList	=> sub {1},	#subclass method to add custom parameters from xml
-		_stdFilters	=> sub {()},
+		_stdFilters	=> sub {()},	#subclass method to add custom filters
 	},
 ;
 

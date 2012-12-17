@@ -2,8 +2,8 @@ package Redmine::KPI::Element::Project;
 use Badger::Class
 	base		=> 'Redmine::KPI::Element::Base',
 	methods		=> {
-		issues		=> sub {shift->__queryFactory('issues')},
-		timeEntries	=> sub {shift->__queryFactory('timeEntries')},
+		issues		=> sub {shift->__queryFactory('issues', @_)},
+		timeEntries	=> sub {shift->__queryFactory('timeEntries', @_)},
 	},
 ;
 

@@ -6,7 +6,7 @@ use Exporter::Lite;
 
 our @EXPORT	= qw / passConfigParams checkConfig/;
 
-our @PARAMS_THAT_PASS_THRU = qw / url authKey dryRun minHours roundHours/;
+our @PARAMS_THAT_PASS_THRU = qw / url authKey dryRun minHours roundHours period/;
 
 
 sub checkConfig

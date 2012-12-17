@@ -24,7 +24,7 @@ if ( not length $url or not length $auth_key or not length $query_id)
 }
 else
 {
-	plan tests => 13;
+	plan tests => 15;
 #	plan skip_all => 'Temporary disabled';
 }
 
@@ -128,7 +128,22 @@ $p = $p->list->{$TEST_PRJ_ID};
 my $totalTimeWithRounding = $p->timeEntries->totalTime;
 cmp_ok($totalTimeWithRounding, '>', $totalTimeWithoutRounding, 'Check if config variable passing works, through projects to timeEntries');
 
-#$p->timeEntriesLimit(date "2012-12-01", date "2012-30-01");
-#my $totalTime1Month = $p->timeEntries->totalTime;
-#cmpl_ok($totalTime1Month, '>', $totalTimeWithoutRounding, 'Check if timeEntries limit works');
+$p = Redmine::KPI::Query::Projects->new(
+	url     	=> $url,
+	authKey 	=> $auth_key,
+	roundHours 	=> 1,
+	period		=> [ "2012-12-04", "2012-12-05" ],
+);
 
+$p = $p->list->{$TEST_PRJ_ID};
+my $totalTimeForTwoDaysWithRounding = $p->timeEntries->totalTime;
+cmp_ok($totalTimeForTwoDaysWithRounding, '<', $totalTimeWithRounding, 'Check if config variable passing for periods is working');
+
+$p = Redmine::KPI::Query::Projects->new(
+	url     	=> $url,
+	authKey 	=> $auth_key,
+	roundHours 	=> 1,
+);
+
+$p = $p->list->{$TEST_PRJ_ID};
+is($p->timeEntries(period => ['2012-12-04', '2012-12-05'])->totalTime, $totalTimeForTwoDaysWithRounding, 'Check fetching time entries for period')
