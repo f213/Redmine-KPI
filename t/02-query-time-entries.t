@@ -1,7 +1,7 @@
 use strict;
 use warnings;
 use utf8;
-use Test::More tests => 9;
+use Test::More tests => 11;
 
 
 use Redmine::KPI::Query::TimeEntries;
@@ -59,3 +59,19 @@ $q = Redmine::KPI::Query::TimeEntries->new(
 	period	=> "2012-12-04",
 );
 is($q->totalTime, 27.99, 'Count total hours with limit to one date (scalar)');
+
+#8.19
+$q = Redmine::KPI::Query::TimeEntries->new(
+	xml => 't/fixtures/time_entries.xml',
+	period => '2012-12-04',
+	activity => 'РазрАбоТка',
+);
+is($q->totalTime, 8.19, 'Count total hours with one date and activity name');
+
+$q = Redmine::KPI::Query::TimeEntries->new(
+	xml => 't/fixtures/time_entries.xml',
+	period => '2012-12-04',
+	activity => 9,
+);
+is($q->totalTime, 8.19, 'Count total hours with one date and activity id');
+

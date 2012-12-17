@@ -61,7 +61,7 @@ sub _init
 	}
 	if($self->{config}{period})
 	{
-		#some note about 'date' magic: when we use Class::Date: date('2012-12-21') eq date(date('2012-12-21')) so user can pass scalar parsable date or instance of Class::Date object
+		#some note about 'date' magic: when we use Class::Date date('2012-12-21') is equal to date(date('2012-12-21')) so user can pass scalar parsable date or instance of Class::Date object
 		if(ref($self->{config}{period}) eq 'ARRAY') #double dates given
 		{
 			our @period = @{ $self->{config}{period} };
@@ -84,6 +84,28 @@ sub _init
 			);
 		}
 
+	}
+	if($self->{config}{activity})
+	{
+		if($self->{config}{activity}=~/^\d+$/) #actvityId
+		{
+			$self->_addFilter(
+				local	=> 'activity/id',
+				value	=> $self->{config}{activity},
+			);
+		}
+		else
+		{
+			our $name = $self->{config}{activity};
+			$self->_addFilter(
+				local	=> 'activity/name',
+				value	=> sub
+					{
+						return 1 if($_[0] =~ /^$name$/i);
+						0;
+					}
+			);
+		}
 	}
 	1;
 }
