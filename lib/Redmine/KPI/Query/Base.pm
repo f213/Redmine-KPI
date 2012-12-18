@@ -6,7 +6,9 @@ use Badger::Class
 	mutators	=> 'raw xml list countByMeta',
 	methods		=> {
 		_getUrl		=> sub {''},	#path for the url
-		_init		=> sub {1},	#custom subclass initialisation: set node names, filters etc.	
+		_nodesName	=> sub {''},	#xml node names
+		_elemName	=> sub {''},	#name of result Element from Redmine::KPI::Element
+		_init		=> sub {1},	#custom subclass initialisation: custom filters, query params etc.
 		_limit		=> sub {100},	#custom subclass query limit, might be more than 100, e.g. for TimeEntries. NOTE - needs modifications in redmine core
 		_updateList	=> sub {1},	#subclass method to add custom parameters from xml
 		_stdFilters	=> sub {()},	#subclass method to add custom filters
@@ -163,14 +165,14 @@ sub _updateCount
 sub _makeList
 {
 	my $self = shift;
-	if(exists $self->{nodesNames} and length $self->{nodesNames})
+	if(length $self->_nodesName)
 	{
-		foreach($self->xml->findnodes($self->{nodesNames}))
+		foreach($self->xml->findnodes($self->_nodesName))
 		{
 			my $node = $_;
 			my $id = $node->findvalue('id');
 
-			$self->{list}{$id} = $self->_elementFactory($self->{elemName},
+			$self->{list}{$id} = $self->_elementFactory($self->_elemName,
 				id	=> $id,
 				name	=> $_->findvalue('name'),
 			);

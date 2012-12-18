@@ -2,23 +2,17 @@ package Redmine::KPI::Query::Projects;
 use Badger::Class
 	base	=> 'Redmine::KPI::Query::Base',
 	methods	=> {
-		_getUrl	=> sub {'projects.xml'},
+		_getUrl		=> sub {'projects.xml'},
+		_nodesName	=> sub {'projects/project'},
+		_elemName	=> sub {'project'},
 	},
 ;
-
-sub _init
-{
-	my $self = shift;
-	
-	$self->{nodesNames} = 'projects/project';
-	$self->{elemName} = 'project';
-}
 
 sub _updateList
 {
 	my $self = shift;
 
-	foreach($self->xml->findnodes($self->{nodesNames}))
+	foreach($self->xml->findnodes($self->_nodesName))
 	{
 		my $id = $_->findvalue('id');
 		$self->{list}{$id}->param('redmineId',		$_->findvalue('identifier'));

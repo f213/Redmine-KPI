@@ -2,10 +2,12 @@ package Redmine::KPI::Query::TimeEntries;
 use Badger::Class
 	base	=> 'Redmine::KPI::Query::Base',
 	methods	=> {
-		_limit		=> sub{1000},
-		_getUrl		=> sub{'time_entries.xml'},
-		_stdFilters	=> sub{qw/tracker project issue activity user/},
-		_stdParams	=> sub{qw/project issue user activity/},
+		_getUrl		=> sub {'time_entries.xml'},
+		_nodesName	=> sub {'time_entries/time_entry'},
+		_elemName	=> sub {'timeEntry'},
+		_limit		=> sub {1000},
+		_stdFilters	=> sub {qw/tracker project issue activity user/},
+		_stdParams	=> sub {qw/project issue user activity/},
 	},
 ;
 use POSIX qw /ceil/;
@@ -26,9 +28,6 @@ sub _init
 {
 	my $self = shift;
 	
-	$self->{nodesNames} = 'time_entries/time_entry';
-	$self->{elemName} = 'timeEntry';
-
 	if($self->{config}{period})
 	{
 		# some note about 'date' magic: when we use Class::Date date('2012-12-21') is equal to date(date('2012-12-21')) so user can pass scalar parsable date or instance of Class::Date object
@@ -62,7 +61,7 @@ sub _updateList
 {
 	my $self = shift;
 
-	foreach($self->xml->findnodes($self->{nodesNames}))
+	foreach($self->xml->findnodes($self->_nodesName))
 	{
 		my $id = $_->findvalue('id');
 		$self->{list}{$id}->param('hours',	$_->findvalue('hours'));
