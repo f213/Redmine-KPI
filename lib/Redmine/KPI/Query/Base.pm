@@ -10,6 +10,7 @@ use Badger::Class
 		_limit		=> sub {100},	#custom subclass query limit, might be more than 100, e.g. for TimeEntries. NOTE - needs modifications in redmine core
 		_updateList	=> sub {1},	#subclass method to add custom parameters from xml
 		_stdFilters	=> sub {()},	#subclass method to add custom filters
+		_stdParams	=> sub {()},	#subclass method to add custom standard parameters
 	},
 ;
 
@@ -166,12 +167,15 @@ sub _makeList
 	{
 		foreach($self->xml->findnodes($self->{nodesNames}))
 		{
-			my $id = $_->findvalue('id');
+			my $node = $_;
+			my $id = $node->findvalue('id');
 
 			$self->{list}{$id} = $self->_elementFactory($self->{elemName},
 				id	=> $id,
 				name	=> $_->findvalue('name'),
-			)
+			);
+
+			$self->_addStdParam($node, $_) foreach ($self->_stdParams);
 		}
 	}
 }
@@ -208,5 +212,25 @@ sub _addStdFilter
 		);
 	}
 }
+
+sub _addStdParam
+{
+	my $self = shift;
+	my $node = shift;
+	my $name = shift;
+
+	my $xmlParamName = $name;
+
+	my $id = $node->findvalue('id');
+
+	$name =~ s/_(.{0,1})/uc($1)/eg; #redmine snakecase to our camelcase
+	$self->{list}{$id}->param($name,   $self->{elemFactory}->element($name,
+			id	=> $node->findvalue("$name/\@id"),
+			name	=> $node->findvalue("$name/\@name"),
+		)
+	);
+}
+
+	
 
 1;	

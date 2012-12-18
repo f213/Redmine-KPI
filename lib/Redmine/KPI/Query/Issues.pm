@@ -4,6 +4,7 @@ use Badger::Class
 	methods	=> {
 		_getUrl		=> sub{'issues.xml'},
 		_stdFilters	=> sub{qw /project tracker author/},
+		_stdParams	=> sub{qw /project tracker author/},
 	},
 ;
 use Class::Date qw/date/;
@@ -48,22 +49,6 @@ sub _updateList
 	{
 		my $id = $_->findvalue('id');
 		$self->{list}{$id}->param('name',	$_->findvalue('subject'));
-		#TODO: separate method
-		$self->{list}{$id}->param('project',	$self->{elemFactory}->element('project',
-				id	=> $_->findvalue('project/@id'),
-				name	=> $_->findvalue('project/@name'),
-			)
-		);
-		$self->{list}{$id}->param('tracker',	$self->{elemFactory}->element('tracker',
-				id	=> $_->findvalue('tracker/@id'),
-				name	=> $_->findvalue('tracker/@name'),
-			)
-		);
-		$self->{list}{$id}->param('author',	$self->{elemFactory}->element('author',
-				id	=> $_->findvalue('author/@id'),
-				name	=> $_->findvalue('author/@name'),
-			)
-		);
 		$self->{list}{$id}->param('date',	date ($_->findvalue('created_on')));
 
 

@@ -5,6 +5,7 @@ use Badger::Class
 		_limit		=> sub{1000},
 		_getUrl		=> sub{'time_entries.xml'},
 		_stdFilters	=> sub{qw/tracker project issue activity user/},
+		_stdParams	=> sub{qw/project issue user activity/},
 	},
 ;
 use POSIX qw /ceil/;
@@ -63,11 +64,7 @@ sub _updateList
 
 	foreach($self->xml->findnodes($self->{nodesNames}))
 	{
-		my $node = $_;
-		my $id = $node->findvalue('id');
-
-		$self->__addStdParam($node, $_) foreach qw /project issue user activity/;
-
+		my $id = $_->findvalue('id');
 		$self->{list}{$id}->param('hours',	$_->findvalue('hours'));
 		$self->{list}{$id}->param('spentOn',	date( $_->findvalue('spent_on' ) ));
 	}
@@ -96,23 +93,4 @@ sub __formatHours
 		$self->{list}{$_}->param('hours', $h);
 	}
 }
-
-
-sub __addStdParam
-{
-	(my $self, my $node,  my $paramName) = @_;
-	my $xmlParamName = $paramName;
-	
-	my $id = $node->findvalue('id');
-	$paramName =~ s/_(.{0,1})/uc($1)/eg; #redmine snakecase to our camelcase
-
-	$self->{list}{$id}->param($paramName,	$self->{elemFactory}->element($paramName,
-			id	=> $node->findvalue("$xmlParamName/\@id"),
-			name	=> $node->findvalue("$xmlParamName/\@name"),
-		)
-	);
-}
-
-
-
 1;
