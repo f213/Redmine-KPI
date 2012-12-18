@@ -3,6 +3,7 @@ use Badger::Class
 	base 		=> 'Redmine::KPI::Element::Base',
 	methods		=> {
 		_paramsToFetch	=> sub { qw /priority status author assignedTo start_date due_date done_ratio estimated_hours/ },
+		timeEntries	=> sub { shift->__queryFactory('timeEntries', @_) },
 	},
 ;
 
@@ -68,6 +69,14 @@ sub __fetchChangeSets
 
 	}
 	$self->param('changesets', \%cs);
+}
+sub __queryFactory
+{
+	my $self = shift;
+	return $self->_queryFactory(shift,
+		issue         => $self->param('id'),
+		@_,
+	);
 }
 
 
