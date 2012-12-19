@@ -25,7 +25,7 @@ sub _init
 
 			$self->_addFilter(
 				get	=> 'created_on',
-				value	=> '><'.join '|', @period,
+				value	=> '><'.join '|', @period, # http://www.redmine.org/projects/redmine/wiki/Rest_Issues
 			);
 			$self->_addFilter(
 				local	=> 'date',
