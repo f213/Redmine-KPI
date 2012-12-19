@@ -9,6 +9,13 @@ use Badger::Class
 
 our @FETCH_URL_PARAMETERS = qw /children relations changesets/;
 
+sub cost
+{
+	my $self = shift;
+
+	$self->timeEntries(@_)->cost;
+}
+
 sub _getUrl
 {
 	my $self = shift;

@@ -23,6 +23,15 @@ sub totalTime
 	return $t;
 }
 
+sub cost
+{
+	my $self = shift;
+
+	my $c = 0;
+	$c += $self->list->{$_}->cost foreach keys %{$self->{list}};
+	return $c;
+}
+
 
 sub _init
 {

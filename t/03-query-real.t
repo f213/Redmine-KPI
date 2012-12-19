@@ -24,7 +24,7 @@ if ( not length $url or not length $auth_key or not length $query_id)
 }
 else
 {
-	plan tests => 18;
+	plan tests => 19;
 #	plan skip_all => 'Temporary disabled';
 }
 
@@ -175,4 +175,17 @@ $i = Redmine::KPI::Element::Issue->new(
 );
 
 is($i->timeEntries(period => ['2012-12-12', '2012-12-17'])->totalTime, 18.3, 'Fetching timeEntries by issue for period');
+
+use Redmine::KPI::CostProvider;
+
+$q = Redmine::KPI::Query::Issues->new(
+	url             => $url,
+	authKey         => $auth_key,
+	project         => $TEST_PRJ_ID,
+	costProvider	=> Redmine::KPI::CostProvider->new(
+		'разработка' => 123,
+	),
+);
+
+is($q->list->{$TEST_TASK_ID}->cost, 123, 'Check if task can count its own cost');
 

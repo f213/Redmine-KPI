@@ -15,7 +15,6 @@ our $ELEMENT_NAMES = {
 	priority	=> 'Std',
 	tracker		=> 'Std',
 	status		=> 'Std',
-	timeEntry	=> 'Std',
 	changeset	=> 'ChangeSet',
 };
 
