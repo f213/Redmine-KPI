@@ -2,14 +2,14 @@ package Redmine::KPI::Fetch;
 use Badger::Class base => 'Class::Singleton';
 use File::Slurp;
 use Carp;
-
+#TODO - exceptions
 sub fetch
 {
 	(my $self, my $whatToFetch, my $apiKey) = @_;
 
 	if(ref($whatToFetch) eq 'Rose::URI')
 	{
-		$self->decline('we need authKey param') if not $apiKey or not length $apiKey;
+		confess('we need authKey param') if not $apiKey or not length $apiKey;
 		my $ua = LWP::UserAgent->new();
 		$ua->default_header(
 			'X-Redmine-API-Key' => $apiKey,
