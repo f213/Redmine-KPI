@@ -5,6 +5,7 @@ use Badger::Class
 		_paramsToFetch	=> sub { qw /priority status author assignedTo start_date due_date done_ratio estimated_hours/ },
 		timeEntries	=> sub { shift->__queryFactory('timeEntries', @_) },
 	},
+	mutators	=> qw /related/;
 ;
 
 our @FETCH_URL_PARAMETERS = qw /children relations changesets/;
@@ -38,9 +39,11 @@ sub _parse
 
 	$self->param('description',	$self->{rootNode}->findvalue('description'));
 
+
 	$self->__fetchChangeSets();
 	1;
 }
+# TODO move this method to the base class
 sub __addStdParam
 {
 	my $self = shift;
@@ -54,6 +57,9 @@ sub __addStdParam
 		name	=> $self->{rootNode}->findvalue("$xmlParamName/\@name"),
 	);
 }
+
+
+
 sub __fetchChangeSets
 {
 	my $self = shift;

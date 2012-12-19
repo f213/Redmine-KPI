@@ -31,7 +31,7 @@ sub init
 
 	$self->{config} = $config; #i donna use Badger::Class::Config because if i would do so, i should write all of config variables in the top
 	
-	my $c = checkConfig($self->{config});
+	my $c = checkConfig($self->_elemName, $self->{config});
 	$self->error($c) if $c;
 
 	my $url = exists $self->{config}{url} ? $self->{config}{url} : '';
@@ -49,7 +49,10 @@ sub init
 
 	$self->_init() or $self->error("Couldn't do class initialisation");
 	
-	$self->query() if not exists $self->{config}{dryRun} or not $self->{config}{dryRun};
+	if((not exists $self->{config}{dryRun} or not $self->{config}{dryRun}) and (not exists $self->{dryRun} or not $self->{dryRun}))
+	{
+		$self->query()
+	}
 
 	return $self;
 }

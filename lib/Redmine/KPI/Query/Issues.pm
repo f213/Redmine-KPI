@@ -37,6 +37,25 @@ sub _init
 		}
 		#TODO scalar and Class::Date parameters
 	}
+
+	# TODO maybe move this to the parent class
+	if(exists $self->{config}{$self->_elemName}) # if we've got issue list, then we just dont do _query(), but insert issues into the list ourselves.
+	{
+		if(ref($self->{config}{$self->_elemName}) eq 'ARRAY')
+		{
+			foreach(@{ $self->{config}{$self->_elemName} })
+			{
+				$self->{list}{$_} = $self->_elementFactory($self->_elemName,
+					id	=> $_,
+				);
+			}
+
+			$self->{dryRun} = 1; # _query() will not be done
+
+			$self->{count} = keys %{ $self->{list} }; #_updateList usualy does that, but we didn't run _query()
+		}
+	}
+
 	1;
 }
 
@@ -50,7 +69,7 @@ sub _updateList
 		$self->{list}{$id}->param('name',	$_->findvalue('subject'));
 		$self->{list}{$id}->param('date',	date ($_->findvalue('created_on')));
 
-
 	}
+
 }
 1;

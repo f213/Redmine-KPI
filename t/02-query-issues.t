@@ -1,7 +1,7 @@
 use strict;
 use warnings;
 use utf8;
-use Test::More tests => 11;
+use Test::More tests => 12;
 
 
 use Redmine::KPI::Query::Issues;
@@ -63,3 +63,9 @@ is(ref($i->param('changesets')->{'3a6f0c84c082a8548a4599de6042205120dc5bed'}->pa
 is(keys %{ $i->param('changesets') }, 2, 'All changesets are fetched');
 
 
+
+$q = Redmine::KPI::Query::Issues->new(
+	issue	=> [1,2,3,4],
+);
+
+is($q->count, 4, 'Check building issue queries for certain ids');
