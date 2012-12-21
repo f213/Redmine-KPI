@@ -12,13 +12,13 @@ our $TEST_PRJ_ID = 1;
 our ($url, $auth_key, $query_id);
 eval 
 {
-	$url        = read_file ('./t/real_auth_data/url'); chomp $url;
-	$auth_key   = read_file ('./t/real_auth_data/auth_key'); chomp $auth_key;
-	$query_id   = read_file ('./t/real_auth_data/query_id'); chomp $query_id;
+	$url        = read_file ('./t/real_auth_data/url');
+	$auth_key   = read_file ('./t/real_auth_data/auth_key');
+	$query_id   = read_file ('./t/real_auth_data/query_id');
 };
 
 
-if ( not length $url or not length $auth_key or not length $query_id)
+if ( not $url or not $auth_key or not $query_id)
 {
 	plan skip_all => 'This tests need real auth data';
 }
@@ -27,7 +27,9 @@ else
 	plan tests => 19;
 #	plan skip_all => 'Temporary disabled';
 }
-
+chomp $url;
+chomp $auth_key;
+chomp $query_id;
 
 use Redmine::KPI::Query::Trackers;
 
