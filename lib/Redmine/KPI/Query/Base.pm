@@ -5,14 +5,14 @@ use Badger::Class
 	base		=> 'Badger::Base',
 	mutators	=> 'raw xml list',
 	methods		=> {
-		_getUrl		=> sub {''},	#path for the url
-		_nodesName	=> sub {''},	#xml node names
-		_elemName	=> sub {''},	#name of result Element from Redmine::KPI::Element
+		_getUrl		=> sub {''},	#path to the url of query
+		_nodesName	=> sub {''},	#xml node names. Every subclass must define it
+		_elemName	=> sub {''},	#name of result Element from Redmine::KPI::Element. Bunch of that eleents is all what we produce:)
 		_init		=> sub {1},	#custom subclass initialisation: custom filters, query params etc.
 		_limit		=> sub {100},	#custom subclass query limit, might be more than 100, e.g. for TimeEntries. NOTE - needs modifications in redmine core
-		_updateList	=> sub {1},	#subclass method to add custom parameters from xml
-		_stdFilters	=> sub {()},	#subclass method to add custom filters
-		_stdParams	=> sub {()},	#subclass method to add custom standard parameters
+		_updateList	=> sub {1},	#subclass method to add custom parameters from xml. Every subclass that need non-std parameters must fetch them in this method
+		_stdFilters	=> sub {()},	#subclass method to add custom filters. stdFilter is a filter for tag like '<something name = "name" id = 1>".
+		_stdParams	=> sub {()},	#subclass method to add custom standard parameters. stdParam is some Element:: instance with two parameters - id and name, which is added as a ->param to elements which we produce
 	},
 	overload	=> {
 		'@{}'	=> \&_asArray,
@@ -55,7 +55,7 @@ sub init
 
 	$self->_init() or $self->error("Couldn't do class initialisation");
 	
-	if((not exists $self->{config}{dryRun} or not $self->{config}{dryRun}) and (not exists $self->{dryRun} or not $self->{dryRun}))
+	if((not exists $self->{config}{dryRun} or not $self->{config}{dryRun}) and (not exists $self->{dryRun} or not $self->{dryRun})) #{config}{dryRun} is set by user (e.g. for testing) and {dryRun} we set ourselves
 	{
 		$self->query()
 	}
@@ -82,11 +82,7 @@ sub query
 sub count
 {
 	my $self = shift;
-	if (not exists $self->{count} or not $self->{count})
-	{
-		return 0;
-	}
-	return $self->{count};
+	exists $self->{count} and $self->{count} ? $self->{count} : 0;
 }
 sub _fetch
 {
@@ -175,17 +171,17 @@ sub _makeList
 	my $self = shift;
 	if(length $self->_nodesName)
 	{
-		foreach($self->xml->findnodes($self->_nodesName))
+		foreach($self->xml->findnodes($self->_nodesName)) #every subclass defines _nodeName
 		{
 			my $node = $_;
 			my $id = $node->findvalue('id');
 
-			$self->{list}{$id} = $self->_elementFactory($self->_elemName,
+			$self->{list}{$id} = $self->_elementFactory($self->_elemName, #elemName is the name of element, bunch of wich every our subclass is producing. Names must be the same here, and in the factory
 				id	=> $id,
 				name	=> $_->findvalue('name'),
 			);
 
-			$self->_addStdParam($node, $_) foreach ($self->_stdParams);
+			$self->_addStdParam($node, $_) foreach ($self->_stdParams); #every subclass defined _stdParams
 		}
 	}
 }
