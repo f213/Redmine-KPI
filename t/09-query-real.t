@@ -24,8 +24,11 @@ if ( not length $url or not length $auth_key or not length $query_id)
 }
 else
 {
+	unless($ENV{REAL_TESTS})
+	{
+		plan skip_all => "For running this test suite use 'make REAL_TESTS=1 test'";
+	}
 	plan tests => 19;
-#	plan skip_all => 'Temporary disabled';
 }
 
 
