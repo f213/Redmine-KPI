@@ -17,6 +17,8 @@ use Badger::Class
 	overload	=> {
 		'@{}'	=> \&_asArray,
 		'bool'	=> \&_asBool,
+		'0+'	=> \&_asInt,
+		'<=>'	=> \&_cmp, #only binary comparison, i dont need full yet.
 	},
 ;
 
@@ -248,8 +250,8 @@ sub _asArray
 
 	return \@z;
 }
-sub _asBool
-{
-	return shift->count ? 1 : 0;
-}
+sub _asBool	{ shift->count ? 1 : 0 }
+sub _asInt	{ shift->count }
+sub _cmp	{ int(shift) <=> int(shift) } #this is sort of magic, we can compare instance to instance, or instance to integer. int($class) == int(25) is true when $class->_asInt == 25
+
 1;

@@ -2,7 +2,7 @@ use strict;
 use warnings;
 use utf8;
 
-use Test::More tests => 3;
+use Test::More tests => 5;
 
 use Redmine::KPI::Query::Issues;
 
@@ -18,6 +18,15 @@ foreach(@{ $q })
 	push @a, $_->param('id');
 }
 is_deeply(\@a, \@b, 'Query to array');
+
+ok($q == 25, 'Compare to integer');
+
+my $q1 = Redmine::KPI::Query::Issues->new(
+	xml	=> 't/fixtures/issues.xml',
+	project	=> 68,
+);
+cmp_ok($q1, '<', $q, 'Compare to each other');
+
 
 ok($q, 'query to bool(true)');
 
