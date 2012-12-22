@@ -7,6 +7,7 @@
   <priority name="Средний" id="4"/>
   <author name="AuthorName" id="12"/>
   <assigned_to name="AssigneeName" id="13"/>
+  <parent id="3384"/>
   <subject>static.js</subject>
   <description>Поменять условие принятия ean13</description>
   <start_date>2012-11-29</start_date>
@@ -28,4 +29,18 @@
       <committed_on>2012-11-29T14:09:28+04:00</committed_on>
     </changeset>
   </changesets>
+  <relations type="array">
+    <relation issue_id="3324" relation_type="relates" delay="" issue_to_id="3648" id="124"/>
+    <relation issue_id="3185" relation_type="relates" delay="" issue_to_id="3324" id="126"/>
+  </relations>
+  <children type="array">
+    <issue id="3385">
+      <tracker name="Feature" id="2"/>
+      <subject>Порядок сортировки</subject>
+    </issue>
+    <issue id="3386">
+      <tracker name="Feature" id="2"/>
+      <subject>onfly редактирование полей "расходы"</subject>
+    </issue>
+  </children>
 </issue>
