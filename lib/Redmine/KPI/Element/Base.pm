@@ -12,6 +12,7 @@ use Badger::Class
 	},
 
 ;
+use XML::LibXML;
 use Rose::URI;
 use Redmine::KPI::Fetch;
 use Redmine::KPI::Config;

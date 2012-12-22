@@ -11,8 +11,10 @@ our @PARAMS_THAT_PASS_THRU = qw / url authKey dryRun minHours roundHours period 
 
 sub checkConfig
 {
+	my $elemName = shift;
 	my $h = shift;
-	if(not exists $h->{dryRun} or not $h->{dryRun})
+
+	if((not exists $h->{dryRun} or not $h->{dryRun}) and not exists $h->{$elemName}) # if someone passed class name with array to config, then there will be no checking, because there will be not any query
 	{
 		if(not exists $h->{xml} and not exists $h->{url})
 		{
