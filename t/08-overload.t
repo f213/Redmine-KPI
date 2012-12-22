@@ -15,16 +15,12 @@ my @b = (346, 352, 366, 367, 391, 393, 408, 410, 411, 413, 416, 418, 424, 427, 4
 
 is_deeply(\@a, \@b, 'Query to array');
 
-TODO: {
-	todo_skip 'bool overloading not finished yet', 2;
+ok($q, 'query to bool(true)');
 
-	ok($q, 'query to bool(true)');
+$q = Redmine::KPI::Query::Issues->new(
+	xml	=> 't/fixtures/issues.xml',
+	project	=> 123123123, #nonexistant
+);
 
-	$q = Redmine::KPI::Query::Issues->new(
-		xml	=> 't/fixtures/issues.xml',
-		project	=> 123123123, #nonexistant
-	);
-
-	ok(!$q, 'query to bool(false)');
-}
+ok(!$q, 'query to bool(false)');
 

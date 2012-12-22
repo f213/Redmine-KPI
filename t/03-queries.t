@@ -1,7 +1,7 @@
 use strict;
 use warnings;
 use utf8;
-use Test::More tests => 6;
+use Test::More tests => 5;
 use Carp;
 use Data::Dumper;
 use Redmine::KPI::Query::Issues;
@@ -23,10 +23,6 @@ is(ref($q->xml), 'XML::LibXML::Document', 'Parsing XML');
 
 
 
-$q = Redmine::KPI::Query::Projects->new(
-	xml => 't/fixtures/projects_no_data.xml',
-);
-is($q->count, 25, 'R::K::Q:Projects count by meta');
 
 $q = Redmine::KPI::Query::Projects->new(
 	xml => 't/fixtures/projects_no_meta.xml',

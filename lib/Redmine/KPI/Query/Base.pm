@@ -3,7 +3,7 @@ use utf8;
 use Redmine::KPI::Element::Factory;
 use Badger::Class
 	base		=> 'Badger::Base',
-	mutators	=> 'raw xml list countByMeta',
+	mutators	=> 'raw xml list',
 	methods		=> {
 		_getUrl		=> sub {''},	#path for the url
 		_nodesName	=> sub {''},	#xml node names
@@ -16,6 +16,7 @@ use Badger::Class
 	},
 	overload	=> {
 		'@{}'	=> \&_asArray,
+		'bool'	=> \&_asBool,
 	},
 ;
 
@@ -81,7 +82,7 @@ sub count
 	my $self = shift;
 	if (not exists $self->{count} or not $self->{count})
 	{
-		return $self->countByMeta;
+		return 0;
 	}
 	return $self->{count};
 }
@@ -164,7 +165,6 @@ sub _updateCount
 {
 	my $self = shift;
 
-	$self->{countByMeta} = $self->{xml}->documentElement->getAttribute('total_count');
 	$self->{count} = keys %{ $self->{list} };
 
 }
@@ -246,5 +246,9 @@ sub _asArray
 	my @z = sort keys %{ $self->list };
 
 	return \@z;
+}
+sub _asBool
+{
+	return shift->count ? 1 : 0;
 }
 1;

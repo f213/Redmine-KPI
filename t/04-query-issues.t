@@ -1,7 +1,7 @@
 use strict;
 use warnings;
 use utf8;
-use Test::More tests => 4;
+use Test::More tests => 5;
 
 
 use Redmine::KPI::Query::Issues;
@@ -32,5 +32,15 @@ is($q->count, 5, 'Fetching issues by tracker');
 $q = Redmine::KPI::Query::Issues->new(
 	issue	=> [1,2,3,4],
 );
-
 is($q->count, 4, 'Check building issue queries for certain ids');
+
+
+#bug? no issues count
+
+$q = Redmine::KPI::Query::Issues->new(
+	xml	=> 't/fixtures/issues.xml',
+	project	=> 1005001,
+);
+
+is($q->count, 0 , 'Check for (bug?) count in empty queries list');
+
