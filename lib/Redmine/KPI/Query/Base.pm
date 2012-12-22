@@ -243,7 +243,8 @@ sub _addStdParam
 sub _asArray
 {
 	my $self = shift;
-	my @z = sort keys %{ $self->list };
+	my @z;
+	push @z, $self->{list}{$_} foreach sort keys %{ $self->list };
 
 	return \@z;
 }
