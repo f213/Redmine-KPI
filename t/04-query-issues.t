@@ -1,7 +1,7 @@
 use strict;
 use warnings;
 use utf8;
-use Test::More tests => 6;
+use Test::More tests => 9;
 
 
 use Redmine::KPI::Query::Issues;
@@ -32,12 +32,35 @@ is($q->count, 5, 'Fetching issues by tracker');
 
 
 
+FILTERS:
+{
+	$q = Redmine::KPI::Query::Issues->new(
+		xml	=> 't/fixtures/issues.xml',
+	);
+	$q->filter(tracker=>3);
+	is($q->count, 5, 'Filtering issues by tracker id');
+
+	$q = Redmine::KPI::Query::Issues->new(
+		xml	=> 't/fixtures/issues.xml',
+	);
+	$q->filter(tracker=>'support');
+	is($q->count, 5, 'Filtering issues by tracker name');
+
+	$q = Redmine::KPI::Query::Issues->new(
+		xml	=> 't/fixtures/issues.xml',
+	);
+	$q->filter('tracker/id'=>3);
+	is($q->count, 5, 'Filtering issues by param name/val');
+}
+
+
+
 
 $q = Redmine::KPI::Query::Issues->new(
 	issue	=> [1,2,3,4],
 );
-is($q->count, 4, 'Check building issue queries for certain ids');
 
+is($q->count, 4, 'Check building issue queries for certain ids');
 
 #bug? no issues count
 

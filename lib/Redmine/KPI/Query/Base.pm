@@ -13,7 +13,7 @@ use Badger::Class
 		_updateList	=> sub {1},	#subclass method to add custom parameters from xml. Every subclass that need non-std parameters must fetch them in this method
 		_stdFilters	=> sub {()},	#subclass method to add custom filters. stdFilter is a filter for tag like '<something name = "name" id = 1>".
 		_stdParams	=> sub {()},	#subclass method to add custom standard parameters. stdParam is some Element:: instance with two parameters - id and name, which is added as a ->param to elements which we produce
-		_txtParams	=> sub {qw/name/},	#subclass method to text searchable params
+		_txtParams	=> sub {qw/name/},	#subclass method to text searchable params. The first of this param used as default searchable param in filter()
 	},
 	overload	=> {
 		'@{}'	=> \&_asArray,
@@ -104,6 +104,43 @@ sub find
 			}
 		}
 	}
+}
+
+sub filter
+{
+	my $self = shift;
+	my %f =  @_ ;
+
+	foreach (keys %f)
+	{
+		if(/\//) #by param
+		{
+			$self->_addFilter(
+				local	=> $_,
+				value	=> $f{$_},
+			);
+		}
+		else
+		{
+			if($f{$_} =~ /^\d+$/)
+			{
+				$self->_addFilter(
+					local	=> "$_/id",
+					value	=> $f{$_},
+				);
+			}
+			else
+			{
+				my @p = $self->_txtParams;
+				our $val = $f{$_};
+				$self->_addFilter(
+					local	=> "$_/" . $p[0],
+					value	=> sub { $_[0] =~ /^$val$/i ? 1 : 0 }, #if param val matches $val, then it will pass
+				);
+			}
+		}
+	}
+	$self->_filterList();
 }
 
 sub _fetch
