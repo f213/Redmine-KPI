@@ -14,6 +14,9 @@ use Badger::Class
 		_stdFilters	=> sub {()},	#subclass method to add custom filters
 		_stdParams	=> sub {()},	#subclass method to add custom standard parameters
 	},
+	overload	=> {
+		'@{}'	=> \&_asArray,
+	},
 ;
 
 use Redmine::KPI::Fetch;
@@ -237,5 +240,11 @@ sub _addStdParam
 }
 
 	
+sub _asArray
+{
+	my $self = shift;
+	my @z = sort keys %{ $self->list };
 
-1;	
+	return \@z;
+}
+1;
