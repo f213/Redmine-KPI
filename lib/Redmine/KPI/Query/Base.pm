@@ -75,7 +75,6 @@ sub query
 	$self->xml($xml);
 
 	$self->_makeList();
-	$self->_updateCount();
 	$self->_updateList();
 	$self->_filterList();
 }
