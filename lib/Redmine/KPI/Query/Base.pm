@@ -11,7 +11,7 @@ use Badger::Class
 		_init		=> sub {1},	#custom subclass initialisation: custom filters, query params etc.
 		_limit		=> sub {100},	#custom subclass query limit, might be more than 100, e.g. for TimeEntries. NOTE - needs modifications in redmine core
 		_updateList	=> sub {1},	#subclass method to add custom parameters from xml. Every subclass that need non-std parameters must fetch them in this method
-		_stdFilters	=> sub {()},	#subclass method to add custom filters. stdFilter is a filter for tag like '<something name = "name" id = 1>".
+		_stdFilters	=> sub {()},	#subclass method to add custom filters. stdFilter is a filter for an xml tag like '<something name = "name" id = 1>".
 		_stdParams	=> sub {()},	#subclass method to add custom standard parameters. stdParam is some Element:: instance with two parameters - id and name, which is added as a ->param to elements which we produce
 		_txtParams	=> sub {qw/name/},	#subclass method to text searchable params. The first of this param used as default searchable param in filter()
 	},
@@ -74,8 +74,8 @@ sub query
 	
 	$self->xml($xml);
 
-	$self->_makeList();
-	$self->_updateList();
+	$self->_makeList(); #first-time creating the list with stdParams and default params like id or name
+	$self->_updateList(); #updating the list with custom params
 	$self->_filterList();
 }
 
@@ -100,7 +100,7 @@ sub find
 		{
 			foreach my $p ($self->_txtParams)
 			{
-				return $_ if $_->param($p) eq $what;
+				return $_ if $_->param($p) eq $what; #TODO - coderef support here
 			}
 		}
 	}
@@ -113,16 +113,16 @@ sub filter
 
 	foreach (keys %f)
 	{
-		if(/\//) #by param
+		if(/\//) #default __addFilter syntax like 'tracker/id'. Passing it directly
 		{
 			$self->_addFilter(
 				local	=> $_,
 				value	=> $f{$_},
 			);
 		}
-		else
-		{
-			if($f{$_} =~ /^\d+$/)
+		else 
+		{ #here we can get something like tracker=>'3' or tracker=>'Bug'. 
+			if($f{$_} =~ /^\d+$/) #for the first one
 			{
 				$self->_addFilter(
 					local	=> "$_/id",
@@ -130,7 +130,7 @@ sub filter
 				);
 			}
 			else
-			{
+			{ #and for the second
 				my @p = $self->_txtParams;
 				our $val = $f{$_};
 				$self->_addFilter(
@@ -195,7 +195,7 @@ sub _filterList
 			my $paramName = $_;
 			my @chain = split /\//; #recursively going inside parameters
 
-			my $currentVal = $self->{list}{$id}->param(shift @chain);
+			my $currentVal = $self->{list}{$id}->param(shift @chain); #first param. and may be the last. If the last, then overloading must begin to work, but i dont know what will happen, so please dont do that!
 			$currentVal = $currentVal->param($_)
 				foreach(@chain);
 
@@ -235,7 +235,7 @@ sub _makeList
 			my $node = $_;
 			my $id = $node->findvalue('id');
 
-			$self->{list}{$id} = $self->_elementFactory($self->_elemName, #elemName is the name of element, bunch of wich every our subclass is producing. Names must be the same here, and in the factory
+			$self->{list}{$id} = $self->_elementFactory($self->_elemName, #elemName is the name of element, bunch of which every our subclass is producing. Names must be the same here, and in the factory
 				id	=> $id,
 				name	=> $_->findvalue('name'),
 			);
@@ -270,8 +270,9 @@ sub _addStdFilter
 	}
 	else
 	{
+		my @p = $self->_txtParams; #using the first of _txtParams as default compare param
 		$self->_addFilter(
-			local	=> "$var/name",
+			local	=> "$var/$p[0]",
 			value	=> sub { $_[0] =~ /^$val$/i ? 1 : 0 },
 			@_,
 		);
@@ -288,7 +289,7 @@ sub _addStdParam
 
 	my $id = $node->findvalue('id');
 
-	$name =~ s/_(.{0,1})/uc($1)/eg; #redmine snakecase to our camelcase
+	$name =~ s/_(.{1})/uc($1)/eg; #redmine snakecase to our camelcase
 	$self->{list}{$id}->param($name,   $self->{elemFactory}->element($name,
 			id	=> $node->findvalue("$name/\@id"),
 			name	=> $node->findvalue("$name/\@name"),

@@ -52,7 +52,7 @@ sub _init
 
 			$self->{dryRun} = 1; # _query() will not be done
 
-			$self->{count} = keys %{ $self->{list} }; #_updateList usualy does that, but we didn't run _query()
+			$self->_updateCount();
 		}
 	}
 
