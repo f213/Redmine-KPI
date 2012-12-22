@@ -13,6 +13,7 @@ use Badger::Class
 		_updateList	=> sub {1},	#subclass method to add custom parameters from xml. Every subclass that need non-std parameters must fetch them in this method
 		_stdFilters	=> sub {()},	#subclass method to add custom filters. stdFilter is a filter for tag like '<something name = "name" id = 1>".
 		_stdParams	=> sub {()},	#subclass method to add custom standard parameters. stdParam is some Element:: instance with two parameters - id and name, which is added as a ->param to elements which we produce
+		_txtParams	=> sub {qw/name/},	#subclass method to text searchable params
 	},
 	overload	=> {
 		'@{}'	=> \&_asArray,
@@ -84,6 +85,28 @@ sub count
 	my $self = shift;
 	exists $self->{count} and $self->{count} ? $self->{count} : 0;
 }
+sub find
+{
+	my $self = shift;
+	my $what = shift;
+
+	#TODO search by custom fields, giving this method a hash instead of scalar, or may be write other method
+	foreach(@{ $self })
+	{
+		if($what =~ /^\d+$/)
+		{
+			return $_ if $_->param('id') eq $what;
+		}
+		else
+		{
+			foreach my $p ($self->_txtParams)
+			{
+				return $_ if $_->param($p) eq $what;
+			}
+		}
+	}
+}
+
 sub _fetch
 {
 	my $self = shift;

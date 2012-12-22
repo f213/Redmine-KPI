@@ -1,9 +1,8 @@
 use strict;
 use warnings;
 use utf8;
-use Test::More tests => 5;
-use Carp;
-use Data::Dumper;
+use Test::More tests => 6;
+
 use Redmine::KPI::Query::Issues;
 use Redmine::KPI::Query::Projects;
 use Redmine::KPI::Query::Trackers;
@@ -51,5 +50,7 @@ $testHash = {
 };
 
 is_deeply($q->list->{8}->toHash, $testHash, 'Fetching trackers list');
+
+is_deeply($q->find('Immediate')->toHash, $testHash, 'Finding tracker by name');
 
 
