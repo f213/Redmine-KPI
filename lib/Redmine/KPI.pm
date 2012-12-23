@@ -1,8 +1,22 @@
 package Redmine::KPI;
 
-use base Badger::Base;
-use warnings;
-use strict;
+use Badger::Class
+	base		=> 'Badger::Base',
+	mutators	=> '_cacheCodec',
+	methods		=> {
+		user		=> sub {shift->somewhat		('users', 	@_)},
+		users		=> sub {shift->somewhats	('users', 	@_)},
+		issue		=> sub {shift->somewhat		('issues', 	@_)},
+		issues		=> sub {shift->somewhats	('issues', 	@_)},
+		tracker		=> sub {shift->somewhat		('trackers', 	@_)},
+		trackers	=> sub {shift->somewhats	('trackers',	@_)},
+		project		=> sub {shift->somewhat		('projects',	@_)},
+		projects	=> sub {shift->somewhats	('projects',	@_)},
+	},
+;
+use Redmine::KPI::Query::Factory;
+use Redmine::KPI::Config;
+use Badger::Codec::Base64;
 
 =head1 NAME
 
@@ -16,6 +30,47 @@ Version 0.01
 
 our $VERSION = '0.01';
 
+sub init
+{
+	(my $self, my $config) = @_;
+
+	$self->{config} = $config;
+	$self->_cacheCodec(new Badger::Codec::Base64);
+	$self;
+}
+
+sub _queryFactory
+{
+	my $self = shift;
+	
+	if(exists ($self->{queryFactory}))
+	{
+		return $self->{queryFactory};
+	}
+	$self->{queryFactory} = new Redmine::KPI::Query::Factory;
+}
+
+sub somewhat
+{
+	my $self = shift;
+	my $name = shift;
+
+	my $result = $self->somewhats($name)->find(@_);
+	$result->query if $result and exists $self->{config}{autoFetch} and $self->{config}{autoFetch};
+	return $result;
+	
+}
+sub somewhats
+{
+	my $self = shift;
+	my $name = shift;
+	my $cacheKey = $self->_cacheCodec->encode($name, @_);
+	#TODO write less dumb cache implementation, this is a stub!
+	return $self->{cache}{$cacheKey} if exists $self->{cache}{$cacheKey};
+
+	$self->{cache}{$cacheKey} = $self->_queryFactory->query($name, passConfigParams($self->{config}, @_));
+;
+}
 
 =head1 SYNOPSIS
 
@@ -39,15 +94,9 @@ if you don't export anything, such as for a purely object-oriented module.
 
 =cut
 
-sub function1 {
-}
-
 =head2 function2
 
 =cut
-
-sub function2 {
-}
 
 =head1 AUTHOR
 
