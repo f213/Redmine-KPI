@@ -2,7 +2,7 @@ package Redmine::KPI;
 
 use Badger::Class
 	base		=> 'Badger::Base',
-	mutators	=> '_cacheCodec',
+	mutators	=> '_cacheCodec _queryFactory',
 	methods		=> {
 		user		=> sub {shift->somewhat		('users', 	@_)},
 		users		=> sub {shift->somewhats	('users', 	@_)},
@@ -36,20 +36,9 @@ sub init
 
 	$self->{config} = $config;
 	$self->_cacheCodec(new Badger::Codec::Base64);
+	$self->_queryFactory(new Redmine::KPI::Query::Factory);
 	$self;
 }
-
-sub _queryFactory
-{
-	my $self = shift;
-	
-	if(exists ($self->{queryFactory}))
-	{
-		return $self->{queryFactory};
-	}
-	$self->{queryFactory} = new Redmine::KPI::Query::Factory;
-}
-
 sub somewhat
 {
 	my $self = shift;
