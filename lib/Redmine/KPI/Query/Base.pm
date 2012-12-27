@@ -1,6 +1,7 @@
 package Redmine::KPI::Query::Base;
 use utf8;
 use Redmine::KPI::Element::Factory;
+use Redmine::KPI::Query::Factory;
 use Badger::Class
 	base		=> 'Badger::Base',
 	mutators	=> 'raw xml list',
@@ -47,7 +48,8 @@ sub init
 	my $limit = exists $self->{config}{limit} ? $self->{config}{limit} : $self->_limit;
 	$self->{url}->query_param(limit	=> $limit);
 
-	$self->{elemFactory} = new Redmine::KPI::Element::Factory;
+	$self->{elemFactory} 	= new Redmine::KPI::Element::Factory;
+	$self->{queryFactory}	= new Redmine::KPI::Query::Factory;
 	
 	foreach($self->_stdFilters)
 	{
@@ -249,6 +251,15 @@ sub _elementFactory
 	my $self = shift;
 	my $paramName = shift;
 	return $self->{elemFactory}->element($paramName, 
+		passConfigParams($self->{config}),
+		@_,
+	);
+}
+sub _queryFactory
+{
+	my $self = shift;
+	my $paramName = shift;
+	return $self->{queryFactory}->query($paramName,
 		passConfigParams($self->{config}),
 		@_,
 	);

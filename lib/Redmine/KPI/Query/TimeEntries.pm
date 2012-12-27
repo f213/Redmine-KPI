@@ -32,6 +32,18 @@ sub cost
 	return $c;
 }
 
+sub issues
+{
+	my $self = shift;
+	
+	my %issueIds;
+	
+	$issueIds{$self->{list}->{$_}->param('issue')->param('id')} = 1 foreach sort keys % {$self->list };
+
+	$self->_queryFactory('issues', @_,
+		issue => [ keys %issueIds ],
+	);
+}
 
 sub _init
 {

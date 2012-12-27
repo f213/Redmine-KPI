@@ -1,7 +1,7 @@
 use strict;
 use warnings;
 use utf8;
-use Test::More tests => 11;
+use Test::More tests => 12;
 
 
 use Redmine::KPI::Query::TimeEntries;
@@ -74,4 +74,16 @@ $q = Redmine::KPI::Query::TimeEntries->new(
 	activity => 9,
 );
 is($q->totalTime, 8.19, 'Count total hours with one date and activity id');
+
+
+$q = Redmine::KPI::Query::TimeEntries->new(
+	xml	=> 't/fixtures/time_entries.xml',
+);
+
+my @a = ( 1159, 3108, 3139, 3217, 3221, 3253, 3345, 3360, 3386, 3389, 3395, 3405, 3408, 3413, 3428, 3442, 3444, 3447, 3448, 3453, 3458 );
+
+my @b;
+push @b, $_->param('id') foreach @{ $q->issues };
+
+is_deeply( \@b, \@a, 'Check if timeEntries can get its own issues');
 
