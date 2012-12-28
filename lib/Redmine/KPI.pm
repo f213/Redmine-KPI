@@ -1,5 +1,5 @@
 package Redmine::KPI;
-
+use utf8;
 use Badger::Class
 	base		=> 'Badger::Base',
 	mutators	=> '_cacheCodec _queryFactory',
