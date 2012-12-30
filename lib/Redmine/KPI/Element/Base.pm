@@ -56,7 +56,7 @@ sub param
 {
 	my $self = shift;
 
-	@_ == 2 ? ( $self->{param}{$_[0]} = ref($_[1]) eq 'SCALAR' ? decode('utf8', $_[1]) : $_[1] ) : $self->getParam ($_[0]);
+	@_ == 2 ? ( $self->{param}{$_[0]} = $_[1] ) : $self->getParam ($_[0]);
 }
 sub getParam
 {
