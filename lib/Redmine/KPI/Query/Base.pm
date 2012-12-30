@@ -6,15 +6,15 @@ use Badger::Class
 	base		=> 'Badger::Base',
 	mutators	=> 'raw xml list',
 	methods		=> {
-		_getUrl		=> sub {''},	#path to the url of query
-		_nodesName	=> sub {''},	#xml node names. Every subclass must define it
-		_elemName	=> sub {''},	#name of result Element from Redmine::KPI::Element. Bunch of that eleents is all what we produce:)
-		_init		=> sub {1},	#custom subclass initialisation: custom filters, query params etc.
-		_limit		=> sub {100},	#custom subclass query limit, might be more than 100, e.g. for TimeEntries. NOTE - needs modifications in redmine core
-		_updateList	=> sub {1},	#subclass method to add custom parameters from xml. Every subclass that need non-std parameters must fetch them in this method
-		_stdFilters	=> sub {()},	#subclass method to add custom filters. stdFilter is a filter for an xml tag like '<something name = "name" id = 1>".
-		_stdParams	=> sub {()},	#subclass method to add custom standard parameters. stdParam is some Element:: instance with two parameters - id and name, which is added as a ->param to elements which we produce
-		_txtParams	=> sub {qw/name/},	#subclass method to text searchable params. The first of this param used as default searchable param in filter()
+		_getUrl		=> sub {''},		# path to the url of query
+		_nodesName	=> sub {''},		# xml node names. Every subclass must define it
+		_elemName	=> sub {''},		# name of result Element from Redmine::KPI::Element. Bunch of that eleents is all what we produce:)
+		_init		=> sub {1},		# custom subclass initialisation: custom filters, query params etc.
+		_limit		=> sub {100},		# custom subclass query limit, might be more than 100, e.g. for TimeEntries. NOTE - needs modifications in redmine core
+		_updateList	=> sub {1},		# subclass method to add custom parameters from xml. Every subclass that need non-std parameters must fetch them in this method
+		_stdFilters	=> sub {()},		# subclass method to add custom filters. stdFilter is a filter for an xml tag like '<something name = "name" id = 1>".
+		_stdParams	=> sub {()},		# subclass method to add custom standard parameters. stdParam is some Element:: instance with two parameters - id and name, which is added as a ->param to elements which we produce
+		_txtParams	=> sub {qw/name/},	# subclass method to text searchable params. The first of this param used as default searchable param in filter()
 	},
 	overload	=> {
 		'@{}'	=> \&_asArray,
@@ -192,6 +192,7 @@ sub _filterList
 	foreach my $id (keys %{ $self->{list} })
 	{
 		my $passes = 1;
+		# search by parameters
 		foreach (keys %{ $self->{filterRules} }) #value of filterRules must be a scalar or a coderef. scalar values may be declared like 'project/id', this recursively evaluates to CLASS->param('project')->param('id')
 		{
 			my $paramName = $_;
@@ -211,6 +212,12 @@ sub _filterList
 			{
 				$passes = 0 if $currentVal ne $self->{filterRules}{$_};
 			}
+		}
+		# search by custom field values
+		foreach (keys %{ $self->{config}{customFields} })
+		{
+			my $element = $self->{list}{$id};
+			$passes = 0 if defined $element->customFields->getValue($_) and $element->customFields->getValue($_) ne $self->{config}{customFields}{$_};
 		}
 		$r{$id} = $self->{list}{$id} if $passes;
 	}
@@ -243,6 +250,8 @@ sub _makeList
 			);
 
 			$self->_addStdParam($node, $_) foreach ($self->_stdParams); #every subclass defined _stdParams
+
+			$self->_addCustomFields($id, $node);
 		}
 	}
 }
@@ -307,7 +316,22 @@ sub _addStdParam
 		)
 	);
 }
+sub _addCustomFields
+{
+	my $self = shift;
+	my $id = shift;
+	my $node = shift;
 
+	foreach($node->findnodes('custom_fields/custom_field'))
+	{
+		$self->{list}{$id}->customFields->add(
+			id	=> $_->getAttribute('id'),
+			name	=> $_->getAttribute('name'),
+			value	=> $_->findvalue('value'),
+		);
+	}
+	
+}
 	
 sub _asArray
 {
