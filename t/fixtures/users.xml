@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<users type="array" limit="25" total_count="33" offset="0">
+  <user>
+    <id>26</id>
+    <login>Alex</login>
+    <firstname>name1</firstname>
+    <lastname>surname1</lastname>
+    <mail>dev1@shogo.ru</mail>
+    <created_on>2012-06-27T12:51:08+04:00</created_on>
+    <last_login_on>2012-12-28T13:16:33+04:00</last_login_on>
+    <custom_fields type="array">
+      <custom_field name="Ultraviolet Theme" id="1">
+        <value>pastels_on_dark</value>
+      </custom_field>
+      <custom_field name="Исполнитель задач" id="4">
+        <value>1</value>
+      </custom_field>
+    </custom_fields>
+  </user>
+  <user>
+    <id>1</id>
+    <login>Alexey</login>
+    <firstname>name2</firstname>
+    <lastname>surname2</lastname>
+    <mail>admin@shogo.ru</mail>
+    <created_on>2012-03-31T13:16:32+04:00</created_on>
+    <last_login_on>2012-12-27T17:01:02+04:00</last_login_on>
+    <custom_fields type="array">
+      <custom_field name="Ultraviolet Theme" id="1">
+        <value>active4d</value>
+      </custom_field>
+      <custom_field name="Исполнитель задач" id="4">
+        <value/>
+      </custom_field>
+    </custom_fields>
+  </user>
+</users>

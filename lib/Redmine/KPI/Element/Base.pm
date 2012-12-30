@@ -2,6 +2,7 @@ package Redmine::KPI::Element::Base;
 use Badger::Class
 	base 		=> 'Badger::Base',
 	accessors 	=> 'raw',
+	mutators	=> 'customFields',
 	methods		=> {
 		_paramsFromConfig	=> sub { qw /id name/ },
 		_paramsToFetch		=> sub { [] },
@@ -18,6 +19,7 @@ use Redmine::KPI::Fetch;
 use Redmine::KPI::Config;
 use Redmine::KPI::Query::Factory;
 use Redmine::KPI::Element::Factory;
+use Redmine::KPI::Element::CustomFields;
 
 sub init
 {
@@ -29,6 +31,8 @@ sub init
 	
 	$self->{elemFactory}	= new Redmine::KPI::Element::Factory;
 	$self->{queryFactory}	= new Redmine::KPI::Query::Factory; 
+	
+	$self->customFields(new Redmine::KPI::Element::CustomFields);
 
 	$self->{isFetched} = 0;
 
