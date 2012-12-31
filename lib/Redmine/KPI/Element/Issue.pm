@@ -35,7 +35,7 @@ sub _parse
 	
 	($self->{rootNode}) = $self->{xml}->findnodes('issue');
 	
-	$self->__addStdParam($_) foreach qw /priority project status author assigned_to/;
+	$self->_addStdParam($_) foreach qw /priority project status author assigned_to/;
 
 	$self->param('description',	$self->{rootNode}->findvalue('description'));
 
@@ -45,20 +45,6 @@ sub _parse
 
 	$self->__fetchChangeSets();
 	1;
-}
-# TODO move this method to the base class
-sub __addStdParam
-{
-	my $self = shift;
-	my $paramName = shift;
-	my $xmlParamName = $paramName;
-
-	$paramName =~ s/_(.{0,1})/uc($1)/eg; #redmine snakecase to our camelcase
-
-	$self->_elementFactory($paramName,
-		id	=> $self->{rootNode}->findvalue("$xmlParamName/\@id"),
-		name	=> $self->{rootNode}->findvalue("$xmlParamName/\@name"),
-	);
 }
 
 

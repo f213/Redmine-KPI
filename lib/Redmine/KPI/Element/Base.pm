@@ -117,4 +117,18 @@ sub _queryFactory
 		@_,
 	);
 }
+sub _addStdParam
+{
+	my $self = shift;
+	my $paramName = shift;
+	my $xmlParamName = $paramName;
+
+	$paramName =~ s/_(.{0,1})/uc($1)/eg; #redmine snakecase to our camelcase
+
+	$self->_elementFactory($paramName,
+		id	=> $self->{rootNode}->findvalue("$xmlParamName/\@id"),
+		name	=> $self->{rootNode}->findvalue("$xmlParamName/\@name"),
+	);
+}
+
 1;
