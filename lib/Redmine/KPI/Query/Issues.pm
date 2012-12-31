@@ -35,7 +35,27 @@ sub _init
 					}
 			);
 		}
-		#TODO scalar and Class::Date parameters
+		else
+		{
+			our $date = $self->{config}{period};
+			$self->_addFilter(
+				get	=> 'created_on',
+				value	=> $date,
+			);
+			$self->_addFilter(
+				local	=> 'date',
+				value	=> sub {
+					my $refDate = date($_[0])->clone(
+						hour	=> 0,
+						min	=> 0,
+						sec	=> 0,
+					);
+					return date($date) eq $refDate ? 1 : 0;
+				},
+			);
+					
+
+		}
 	}
 
 	# TODO maybe move this to the parent class

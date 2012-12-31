@@ -1,8 +1,8 @@
 use strict;
 use warnings;
 use utf8;
-use Test::More tests => 9;
-
+use Test::More tests => 11;
+use Class::Date qw /date/;
 
 use Redmine::KPI::Query::Issues;
 
@@ -54,6 +54,17 @@ FILTERS:
 }
 
 
+$q = Redmine::KPI::Query::Issues->new(
+	xml	=> 't/fixtures/issues.xml',
+	period	=> '2012-07-09',
+);
+is($q->count, 2, 'Check issues period by date (one date)');
+
+$q = Redmine::KPI::Query::Issues->new(
+	xml	=> 't/fixtures/issues.xml',
+	period	=> ['2012-07-05', date('2012-07-10')],
+);
+is($q->count, 6, 'Check issues period by date (two dates)');
 
 
 $q = Redmine::KPI::Query::Issues->new(
