@@ -1,12 +1,14 @@
 use strict;
 use warnings;
 use utf8;
-use Test::More tests => 9;
+use Test::More tests => 10;
 use Redmine::KPI::Element::Issue;
 
 my $i = Redmine::KPI::Element::Issue->new(
 	xml => 't/fixtures/issue.xml',
 );
+is($i->param('subject'), 'static.js', 'Fetching issue subject');
+is($i->param('description'), 'Поменять условие принятия ean13', 'Fetching issue description');
 
 my $priorityHash = {
 	id	=> 4,
@@ -32,7 +34,6 @@ my $assignedToHash = {
 };
 is_deeply($i->param('assignedTo')->toHash, $assignedToHash, 'Fetching issue assignee');
 
-is($i->param('description'), 'Поменять условие принятия ean13', 'Fetching issue description');
 
 is(ref($i->param('changesets')->{'3a6f0c84c082a8548a4599de6042205120dc5bed'}), 'Redmine::KPI::Element::ChangeSet', 'Fetching changesets (simple test)');
 is(ref($i->param('changesets')->{'3a6f0c84c082a8548a4599de6042205120dc5bed'}->param('user')), 'Redmine::KPI::Element::User', 'User inside changeset');

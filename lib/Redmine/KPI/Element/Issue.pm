@@ -2,7 +2,7 @@ package Redmine::KPI::Element::Issue;
 use Badger::Class
 	base 		=> 'Redmine::KPI::Element::Base',
 	methods		=> {
-		_paramsToFetch	=> sub { qw /priority status author assignedTo start_date due_date done_ratio estimated_hours relatedToMe relatedFromMe children relations parent/ },
+		_paramsToFetch	=> sub { qw /description subject priority status author assignedTo start_date due_date done_ratio estimated_hours relatedToMe relatedFromMe children relations parent/ },
 		timeEntries	=> sub { shift->__queryFactory('timeEntries', @_) },
 	},
 ;
@@ -38,6 +38,7 @@ sub _parse
 	$self->_addStdParam($_) foreach qw /priority project status author assigned_to/;
 
 	$self->param('description',	$self->{rootNode}->findvalue('description'));
+	$self->param('subject',		$self->{rootNode}->findvalue('subject'));
 
 	$self->__fetchParent();
 	
