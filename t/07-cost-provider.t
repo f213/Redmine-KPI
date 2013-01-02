@@ -4,6 +4,7 @@ use warnings;
 
 use Test::More tests => 5;
 
+use Redmine::KPI;
 use Redmine::KPI::CostProvider;
 use Redmine::KPI::Query::TimeEntries;
 use utf8;
@@ -12,7 +13,8 @@ my $t = Redmine::KPI::Query::TimeEntries->new(
 	xml	=> 't/fixtures/time_entries.xml'
 );
 
-my $kp = Redmine::KPI::CostProvider->new(
+my $k = new Redmine::KPI;
+my $kp = $k->costProvider(
 	'12:Контент'	=> 100,
 	'9:Разработка'	=> 200,
 );

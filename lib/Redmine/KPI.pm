@@ -16,6 +16,7 @@ use Badger::Class
 ;
 use Redmine::KPI::Query::Factory;
 use Redmine::KPI::Config;
+use Redmine::KPI::CostProvider;
 use Badger::Codec::Base64;
 
 =head1 NAME
@@ -59,6 +60,12 @@ sub somewhats
 
 	$self->{cache}{$cacheKey} = $self->_queryFactory->query($name, passConfigParams($self->{config}, @_));
 ;
+}
+sub costProvider
+{
+	my $self = shift;
+
+	return Redmine::KPI::CostProvider->new(@_);
 }
 
 =head1 SYNOPSIS
