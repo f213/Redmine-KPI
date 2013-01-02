@@ -313,6 +313,7 @@ sub _addStdParam
 	$self->{list}{$id}->param($name,   $self->{elemFactory}->element($name,
 			id	=> $node->findvalue("$name/\@id"),
 			name	=> $node->findvalue("$name/\@name"),
+			passConfigParams($self->{config}),
 		)
 	);
 }
