@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<issue>
+  <id>3324</id>
+  <project name="sklad.sportiv" id="1"/>
+  <tracker name="Bug" id="1"/>
+  <status name="Выполнена" id="3"/>
+  <priority name="Средний" id="4"/>
+  <author name="AuthorName" id="12"/>
+  <assigned_to name="AssigneeName" id="13"/>
+  <subject>static.js</subject>
+  <description>Поменять условие принятия ean13</description>
+  <start_date>2012-11-29</start_date>
+  <due_date/>
+  <done_ratio>0</done_ratio>
+  <estimated_hours/>
+  <spent_hours>1.0</spent_hours>
+  <created_on>2012-11-29T14:08:52+04:00</created_on>
+  <updated_on>2012-11-29T14:13:30+04:00</updated_on>
+  <changesets type="array">
+    <changeset revision="3a6f0c84c082a8548a4599de6042205120dc5bed">
+      <user name="Никита Мельников" id="12"/>
+      <comments>Поправлено условие ввода ean 13 refs #3324</comments>
+      <committed_on>2012-11-29T14:08:23+04:00</committed_on>
+    </changeset>
+    <changeset revision="3850394439caaf4649d09ae870b65527f14b943c">
+      <user name="Никита Мельников" id="12"/>
+      <comments>Поправлено условие ввода ean 13 refs #3324</comments>
+      <committed_on>2012-11-29T14:09:28+04:00</committed_on>
+    </changeset>
+  </changesets>
+</issue>

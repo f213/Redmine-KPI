@@ -1,7 +1,7 @@
 use strict;
 use warnings;
 use utf8;
-use Test::More tests => 12;
+use Test::More tests => 13;
 
 
 use Redmine::KPI::Query::TimeEntries;
@@ -87,3 +87,5 @@ push @b, $_->param('id') foreach @{ $q->issues };
 
 is_deeply( \@b, \@a, 'Check if timeEntries can get its own issues');
 
+my $issue = $q->list->{4597};
+is($issue->param('project')->param('name'), 'pool-galaxy.ru', 'Std param for timeEntries (bug?)');

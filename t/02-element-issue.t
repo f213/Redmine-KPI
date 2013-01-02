@@ -1,7 +1,7 @@
 use strict;
 use warnings;
 use utf8;
-use Test::More tests => 8;
+use Test::More tests => 9;
 use Redmine::KPI::Element::Issue;
 
 my $i = Redmine::KPI::Element::Issue->new(
@@ -37,3 +37,5 @@ is($i->param('description'), 'Поменять условие принятия e
 is(ref($i->param('changesets')->{'3a6f0c84c082a8548a4599de6042205120dc5bed'}), 'Redmine::KPI::Element::ChangeSet', 'Fetching changesets (simple test)');
 is(ref($i->param('changesets')->{'3a6f0c84c082a8548a4599de6042205120dc5bed'}->param('user')), 'Redmine::KPI::Element::User', 'User inside changeset');
 is(keys %{ $i->param('changesets') }, 2, 'All changesets are fetched');
+
+is($i->param('nonexistant'), undef, 'checking undefined parameters');

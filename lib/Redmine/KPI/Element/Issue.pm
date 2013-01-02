@@ -20,7 +20,7 @@ sub cost
 sub _getUrl
 {
 	my $self = shift;
-	my $url = 'issues/' . $self->param('id') . '.xml';
+	my $url = 'issues/' . $self->param('id') . '.xml' if $self->param('id');
 
 	if(@FETCH_URL_PARAMETERS)
 	{
@@ -51,6 +51,8 @@ sub _parse
 sub __fetchRelations
 {
 	my $self = shift;
+
+	return if not $self->param('id');
 
 	my @toMe;
 	foreach($self->{rootNode}->findnodes('relations/relation[@issue_to_id = "' . $self->param('id') . '"]'))
@@ -109,13 +111,15 @@ sub __fetchParent
 	my $self = shift;
 
 	my $parentId = $self->{rootNode}->findvalue('parent/@id');
-
-	$self->param('parent', $self->{elemFactory}->element('issue',
-			id	=> $parentId,
-			passConfigParams($self->{config}),
-			@_,
-		)
-	);
+	if($parentId)
+	{
+		$self->param('parent', $self->{elemFactory}->element('issue',
+				id	=> $parentId,
+				passConfigParams($self->{config}),
+				@_,
+			)
+		);
+	}
 }
 sub __queryFactory
 {

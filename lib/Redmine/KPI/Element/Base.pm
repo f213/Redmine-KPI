@@ -66,7 +66,8 @@ sub getParam
 
 	$self->query if $_[0] ~~ @paramsToFetch and not $self->{isFetched};
 
-	return $self->{param}{$_[0]} if exists $_[0] and exists $self->{param}{$_[0]};
+	return undef if not exists $_[0] or not exists $self->{param}{$_[0]};
+	return $self->{param}{$_[0]};
 }
 sub fetch
 {

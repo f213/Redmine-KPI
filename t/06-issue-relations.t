@@ -1,7 +1,7 @@
 use strict;
 use warnings;
 use utf8;
-use Test::More tests => 6;
+use Test::More tests => 8;
 
 use Redmine::KPI::Element::Issue;
 
@@ -17,3 +17,11 @@ is($i->param('relations')->count, 2, 'Fetching complete issue relations (without
 
 is($i->param('parent')->param('id'), 3384, 'Fetching parent issue');
 
+# now lets test undef
+
+$i = Redmine::KPI::Element::Issue->new(
+	id	=> 3324,
+	xml	=> 't/fixtures/issue_no_relations.xml',
+);
+is($i->param('parent'), undef, 'Parent must not be defined');
+is($i->param('children'), undef, 'Children must not be defined');
