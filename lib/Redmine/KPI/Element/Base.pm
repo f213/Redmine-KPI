@@ -81,7 +81,7 @@ sub fetch
         }
 	else
 	{
-		$self->{raw} = $f->fetch($self->{url}, $self->{config}{authKey}) or $self->decline("Couldn't fetch remote data: ".$f->error());
+		$self->{raw} = $f->fetch($self->{url}, $self->{config}{authKey}, $self->{config}) or $self->decline("Couldn't fetch remote data: ".$f->error());
 		return 1;
 	}
 }

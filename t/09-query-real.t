@@ -37,8 +37,9 @@ chomp $query_id;
 use Redmine::KPI::Query::Trackers;
 
 my $q = Redmine::KPI::Query::Trackers->new(
-	url	=> $url,
-	authKey => $auth_key,
+	url		=> $url,
+	authKey 	=> $auth_key,
+	noVerifyHost	=> 1,
 );
 ok($q->count > 0, 'Fetching remote trackers data');
 
@@ -48,6 +49,7 @@ $q = Redmine::KPI::Query::Issues->new(
 	url		=> $url,
 	authKey		=> $auth_key,
 	project		=> 8,
+	noVerifyHost	=> 1,
 );
 my $firstProjectIssuesCount = $q->count;
 
@@ -55,6 +57,7 @@ $q = Redmine::KPI::Query::Issues->new(
 	url		=> $url,
 	authKey		=> $auth_key,
 	project		=> 25,
+	noVerifyHost	=> 1,
 );
 diag("Got $firstProjectIssuesCount from first project, ".$q->count." from second project");
 cmp_ok($q->count, 'ne' , $firstProjectIssuesCount, 'Test filtering issues by project. Fetching issue list for two different projects, they must by not equal');
@@ -64,6 +67,7 @@ $q = Redmine::KPI::Query::Issues->new(
 	authKey		=> $auth_key,
 	project		=> 8,
 	tracker		=> 1,
+	noVerifyHost	=> 1,
 );
 diag("Got $firstProjectIssuesCount total issues, ".$q->count." issues with tracker_id == 1");
 cmp_ok($q->count, '<', $firstProjectIssuesCount, 'Test filtering issues by tracker. There must by less Issues with certain tracker, then total issues');
@@ -73,6 +77,7 @@ $q = Redmine::KPI::Query::Issues->new(
 	url		=> $url,
 	authKey		=> $auth_key,
 	project		=> 1,
+	noVerifyHost	=> 1,
 );
 
 my $i = $q->list->{$TEST_TASK_ID};
@@ -97,6 +102,7 @@ use Redmine::KPI::Query::Projects;
 my $p = Redmine::KPI::Query::Projects->new(
 	url	=> $url,
 	authKey	=> $auth_key,
+	noVerifyHost	=> 1,
 );
 
 is(ref($p->list->{$TEST_PRJ_ID}), 'Redmine::KPI::Element::Project', 'Fetching projects');
@@ -132,6 +138,7 @@ $p = Redmine::KPI::Query::Projects->new(
 	url     	=> $url,
 	authKey 	=> $auth_key,
 	roundHours 	=> 1,
+	noVerifyHost	=> 1,
 );
 $p = $p->list->{$TEST_PRJ_ID};
 my $totalTimeWithRounding = $p->timeEntries->totalTime;
@@ -142,6 +149,7 @@ $p = Redmine::KPI::Query::Projects->new(
 	authKey 	=> $auth_key,
 	roundHours 	=> 1,
 	period		=> [ "2012-12-04", "2012-12-05" ],
+	noVerifyHost	=> 1,
 );
 
 $p = $p->list->{$TEST_PRJ_ID};
@@ -152,6 +160,7 @@ $p = Redmine::KPI::Query::Projects->new(
 	url     	=> $url,
 	authKey 	=> $auth_key,
 	roundHours 	=> 1,
+	noVerifyHost	=> 1,
 );
 
 $p = $p->list->{$TEST_PRJ_ID};
@@ -163,6 +172,7 @@ my $u = Redmine::KPI::Element::User->new(
 	id	=> 6,
 	url	=> $url,
 	authKey	=> $auth_key,
+	noVerifyHost	=> 1,
 );
 
 is($u->timeEntries(period => '2012-12-17')->totalTime, 7.15, 'Fetching user time activity by day');
@@ -172,6 +182,7 @@ $u = Redmine::KPI::Element::User->new(
 	id	=> 14,
 	url	=> $url,
 	authKey	=> $auth_key,
+	noVerifyHost	=> 1,
 );
 
 is($u->issues(period => ['2012-12-12', '2012-12-18'])->count, 25, 'Fetching user-created issues by period');
@@ -181,6 +192,7 @@ $i = Redmine::KPI::Element::Issue->new(
 	id	=> 3650,
 	url	=> $url,
 	authKey	=> $auth_key,
+	noVerifyHost	=> 1,
 );
 
 is($i->timeEntries(period => ['2012-12-12', '2012-12-17'])->totalTime, 18.3, 'Fetching timeEntries by issue for period');
@@ -190,6 +202,7 @@ use Redmine::KPI::CostProvider;
 $q = Redmine::KPI::Query::Issues->new(
 	url             => $url,
 	authKey         => $auth_key,
+	noVerifyHost	=> 1,
 	project         => $TEST_PRJ_ID,
 	costProvider	=> Redmine::KPI::CostProvider->new(
 		'разработка' => 123,

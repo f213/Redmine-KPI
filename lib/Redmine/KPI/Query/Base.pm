@@ -28,8 +28,7 @@ use Redmine::KPI::Fetch;
 use Redmine::KPI::Config;
 use XML::LibXML;
 use LWP::UserAgent;
-require Crypt::SSLeay;
-require IO::Socket::SSL;
+
 use Rose::URI;
 
 
@@ -159,7 +158,7 @@ sub _fetch
 	}
 	else 
 	{ #fetching from remote host
-		my $raw = $f->fetch($self->{url}, $self->{config}{authKey}) or $self->fatal("Couldn't fetch remote data: " . $f->error());
+		my $raw = $f->fetch($self->{url}, $self->{config}{authKey}, $self->{config}) or $self->fatal("Couldn't fetch remote data: " . $f->error());
 		$self->raw($raw);
 		return 1;
 	}

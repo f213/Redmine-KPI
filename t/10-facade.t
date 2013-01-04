@@ -42,6 +42,7 @@ my $k = Redmine::KPI->new(
 	url		=> $url,
 	authKey		=> $auth_key,
 	autoFetch	=> 1,
+	noVerifyHost	=> 1,
 );
 
 my $user = $k->user($TEST_USER_ID);

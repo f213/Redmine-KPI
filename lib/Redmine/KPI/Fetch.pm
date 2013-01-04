@@ -2,18 +2,24 @@ package Redmine::KPI::Fetch;
 use Badger::Class base => 'Class::Singleton';
 use File::Slurp;
 use Carp;
-#TODO - exceptions
+require Crypt::SSLeay;
+require IO::Socket::SSL;
+#TODO - totaly rewrite this from scratch!
 sub fetch
 {
-	(my $self, my $whatToFetch, my $apiKey) = @_;
-
+	(my $self, my $whatToFetch, my $apiKey, my $param) = @_;
+	
 	if(ref($whatToFetch) eq 'Rose::URI')
 	{
 		confess('we need authKey param') if not $apiKey or not length $apiKey;
-		my $ua = LWP::UserAgent->new();
+		my $ua = new LWP::UserAgent;
+
+		$ua->ssl_opts(verify_hostname=>0, SSL_verify_mode => 0x00 ) if exists $param->{noVerifyHost} and $param->{noVerifyHost};
+
 		$ua->default_header(
 			'X-Redmine-API-Key' => $apiKey,
 		);
+
 		my $r = $ua->get($whatToFetch->as_string);
 		$self->error($r->status_line, $whatToFetch) if($r->is_error);
 		return $r->content;

@@ -32,8 +32,9 @@ chomp $auth_key;
 use Redmine::KPI;
 
 my $k = Redmine::KPI->new(
-	url	=> $url,
-	authKey	=> $auth_key,
+	url		=> $url,
+	authKey		=> $auth_key,
+	noVerifyHost	=> 1,
 );
 my $costProvider = $k->costProvider(
         'Разработка'    => 700,
