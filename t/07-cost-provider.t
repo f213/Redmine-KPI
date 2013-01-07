@@ -2,7 +2,7 @@
 use strict;
 use warnings;
 
-use Test::More tests => 5;
+use Test::More tests => 7;
 
 use Redmine::KPI;
 use Redmine::KPI::CostProvider;
@@ -24,11 +24,34 @@ $kp = Redmine::KPI::CostProvider->new(
 );
 is($kp->cost($t->list->{4574}), 7.3*200, 'Check rate counting by timeEntry (param as name)');
 
+$kp = $k->costProvider(
+	activities	=> {
+		'12:Контент'	=> 100,
+		'9:Разработка'	=> 200,
+	},
+);
+is($kp->cost($t->list->{4574}), 7.3*200, 'Check rate counting by timeEntry(new format of the costProvider constructor)');
+
+$kp = $k->costProvider(
+	activities	=> {
+		'12:Контент'	=> 100,
+		'9:Разработка'	=> 200,
+	},
+	users		=> {
+		'6:dev6'	=> 1.5,
+	},
+);
+is($kp->cost($t->list->{4574}), 7.3*200*1.5, 'Check rate couonting by user');
 
 $kp = Redmine::KPI::CostProvider->new(
 	'100500:testNullCost'	=> 200,
 );
-is($kp->cost($t->list->{4574}), 0, 'Check rate counting with anknown activity');
+
+our $badCost;
+eval { $badCost = $kp->cost($t->list->{4574}) };
+ok(!defined $badCost, 'Check rate counting with unknown activity, must bail out');
+
+
 
 
 $t = Redmine::KPI::Query::TimeEntries->new(

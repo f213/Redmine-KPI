@@ -206,8 +206,11 @@ $q = Redmine::KPI::Query::Issues->new(
 	project         => $TEST_PRJ_ID,
 	costProvider	=> Redmine::KPI::CostProvider->new(
 		'разработка' => 123,
+		trackers	=> {
+			'bUg'	=> 1.5,
+		},
 	),
 );
 
-is($q->list->{$TEST_TASK_ID}->cost, 123, 'Check if task can count its own cost');
+is($q->list->{$TEST_TASK_ID}->cost, 123*1.5, 'Check if task can count its own cost, plus check costProvider by trackers');
 
