@@ -58,13 +58,14 @@ sub param
 sub getParam
 {
 	my $self = shift;
+	my $paramName = shift;
 
 	my @paramsToFetch = $self->_paramsToFetch;
+	
+	$self->query if $paramName ~~ @paramsToFetch and not $self->{isFetched} and not exists $self->{param}{$paramName}; # fetching data if a param can be fetched, and is not set by some other way
 
-	$self->query if $_[0] ~~ @paramsToFetch and not $self->{isFetched};
-
-	return undef if not exists $_[0] or not exists $self->{param}{$_[0]};
-	return $self->{param}{$_[0]};
+	return undef if not exists $self->{param}{$paramName};
+	return $self->{param}{$paramName};
 }
 sub fetch
 {
