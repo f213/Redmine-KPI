@@ -2,7 +2,7 @@ package Redmine::KPI;
 use utf8;
 use Badger::Class
 	base		=> 'Badger::Base',
-	mutators	=> '_cacheCodec _queryFactory',
+	mutators	=> '_queryFactory',
 	methods		=> {
 		user		=> sub {shift->somewhat		('users', 	@_)},
 		users		=> sub {shift->somewhats	('users', 	@_)},
@@ -17,7 +17,7 @@ use Badger::Class
 use Redmine::KPI::Query::Factory;
 use Redmine::KPI::Config;
 use Redmine::KPI::CostProvider;
-use Badger::Codec::Base64;
+use Digest::MD5 qw /md5_hex/;
 
 =head1 NAME
 
@@ -36,7 +36,6 @@ sub init
 	(my $self, my $config) = @_;
 
 	$self->{config} = $config;
-	$self->_cacheCodec(new Badger::Codec::Base64);
 	$self->_queryFactory(new Redmine::KPI::Query::Factory);
 	$self;
 }
@@ -54,12 +53,11 @@ sub somewhats
 {
 	my $self = shift;
 	my $name = shift;
-	my $cacheKey = $self->_cacheCodec->encode($name, @_);
-	#TODO write less dumb cache implementation, this is a stub!
+	my $cacheKey = md5_hex($name, @_);
+
 	return $self->{cache}{$cacheKey} if exists $self->{cache}{$cacheKey};
 
 	$self->{cache}{$cacheKey} = $self->_queryFactory->query($name, passConfigParams($self->{config}, @_));
-;
 }
 sub costProvider
 {

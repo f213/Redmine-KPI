@@ -10,13 +10,12 @@ use Badger::Class
 		_paramsToFetch		=> sub { [] },
 		_getUrl			=> sub {''},
 		_init			=> sub {1},
-
 		toHash			=> sub {shift->{param}},
 	},
-
 ;
 use XML::LibXML;
 use Rose::URI;
+use Digest::MD5 qw /md5_hex/;
 use Redmine::KPI::Fetch;
 use Redmine::KPI::Config;
 use Redmine::KPI::Query::Factory;
@@ -24,6 +23,7 @@ use Redmine::KPI::Element::Factory;
 use Redmine::KPI::Element::CustomFields;
 
 sub init
+
 {
 	(my $self, my $config) = @_;
 
@@ -110,10 +110,12 @@ sub _queryFactory
 {
 	my $self = shift;
 	my $name = shift;
-
-	return $self->{queries}{$name} if exists $self->{queries}{$name};
 	
-	$self->{queries}{$name} = $self->{queryFactory}->query($name, 
+	my $cacheKey = md5_hex($name, @_);
+
+	return $self->{queries}{$cacheKey} if exists $self->{queries}{$cacheKey};
+	
+	$self->{queries}{$cacheKey} = $self->{queryFactory}->query($name, 
 		passConfigParams($self->{config}),
 		@_,
 	);
