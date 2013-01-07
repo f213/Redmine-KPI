@@ -30,7 +30,7 @@ sub init
 	
 	$self->_setParamFromConfig($_) foreach($self->_paramsFromConfig());
 	
-	$self->customFields(new Redmine::KPI::Element::CustomFields);
+	$self->customFields(new Redmine::KPI::Element::CustomFields); # TODO - custom fields from element itself, not from query
 
 	$self->{isFetched} = 0;
 	
