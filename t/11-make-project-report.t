@@ -24,7 +24,7 @@ else
 	{
 		plan skip_all => "For running this test suite use 'make REAL_TESTS=1 test'";
 	}
-	plan tests => 1;
+	plan tests => 2;
 }
 chomp $url;
 chomp $auth_key;
@@ -67,12 +67,21 @@ foreach my $entry ( @{ $entries } )
 my $f = read_file('t/reference-report.csv');
 
 my %issuesTest;
+my $totalCost;
 foreach (split /\n/, $f)
 {
 	chomp;
 	(my $id, my $name, my $cost) = split /;/;
 	$issuesTest{$id}{name} = $name;
 	$issuesTest{$id}{cost} = $cost;
+	$totalCost += $cost;
 }
 
 is_deeply(\%issues, \%issuesTest, 'Test creating simple project cost report');
+
+my $prjCost = $prj->cost(
+	period		=> $TEST_PERIOD,
+	costProvider	=> $costProvider,
+);
+
+is($prjCost, $totalCost, 'Test detail report versus project cost count by project::cost');
