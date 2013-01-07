@@ -6,8 +6,7 @@ use Badger::Class
 		timeEntries	=> sub { shift->__queryFactory('timeEntries', @_) },
 	},
 ;
-use Redmine::KPI::Config; # we need this here because we are using $self->{queryFactory} directly sometimes, so we need to pass there config parameters
-
+use utf8;
 our @FETCH_URL_PARAMETERS = qw /children relations changesets/;
 
 sub cost
@@ -60,14 +59,14 @@ sub __fetchRelations
 	{
 		push @toMe, $_->getAttribute('issue_id');
 	}
-	$self->param('relatedToMe', $self->{queryFactory}->query('issues', issue => \@toMe, passConfigParams($self->{config}))) if @toMe; #here we do not use method _queryFactory for bypassing its cache
+	$self->param('relatedToMe', $self->_queryFactory('issues', issue => \@toMe )) if @toMe;
 
 	my @fromMe;
 	foreach($self->{rootNode}->findnodes('relations/relation[@relation_type="relates" and @issue_id = "' . $self->param('id') . '"]'))
 	{
 		push @fromMe, $_->getAttribute('issue_to_id');
 	}
-	$self->param('relatedFromMe', $self->{queryFactory}->query('issues', issue => \@fromMe, passConfigParams($self->{config}), @_ )) if @fromMe;
+	$self->param('relatedFromMe', $self->_queryFactory('issues', issue => \@fromMe )) if @fromMe;
 
 	my @children;
 
@@ -75,10 +74,10 @@ sub __fetchRelations
 	{
 		push @children, $_->getAttribute('id');
 	}
-	$self->param('children', $self->{queryFactory}->query('issues', issue => \@children, passConfigParams($self->{config}), @_ )) if @children;
+	$self->param('children', $self->_queryFactory('issues', issue => \@children )) if @children;
 
 	my @relates = (@fromMe, @toMe);
-	$self->param('relations', $self->{queryFactory}->query('issues', issue => \@relates, passConfigParams($self->{config}), @_ )) if @relates;
+	$self->param('relations', $self->_queryFactory('issues', issue => \@relates )) if @relates;
 
 }
 
@@ -91,15 +90,13 @@ sub __fetchChangeSets
 	foreach($self->{rootNode}->findnodes('changesets/changeset'))
 	{
 		my $id = $_->getAttribute('revision');
-		$cs{$id} = $self->{elemFactory}->element('changeset',
+		$cs{$id} = $self->_elementFactory('changeset',
 			id		=> $id,
 			comments	=> $_->findvalue('comments'),
 			commitedOn	=> $_->findvalue('committed_on'),
-			user		=> $self->{elemFactory}->element('author',
+			user		=> $self->_elementFactory('author',
 					id	=> $_->findvalue('user/@id'),
 					name	=> $_->findvalue('user/@name'),
-					passConfigParams($self->{config}),
-					@_,
 			),
 		);
 
@@ -114,9 +111,8 @@ sub __fetchParent
 	my $parentId = $self->{rootNode}->findvalue('parent/@id');
 	if($parentId)
 	{
-		$self->param('parent', $self->{elemFactory}->element('issue',
+		$self->param('parent', $self->_elementFactory('issue',
 				id	=> $parentId,
-				passConfigParams($self->{config}),
 				@_,
 			)
 		);

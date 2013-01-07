@@ -17,7 +17,7 @@ use Badger::Class
 use Redmine::KPI::Query::Factory;
 use Redmine::KPI::Config;
 use Redmine::KPI::CostProvider;
-use Digest::MD5 qw /md5_hex/;
+use Digest::SHA qw /sha1_hex/;
 
 =head1 NAME
 
@@ -53,7 +53,7 @@ sub somewhats
 {
 	my $self = shift;
 	my $name = shift;
-	my $cacheKey = md5_hex($name, @_);
+	my $cacheKey = sha1_hex($name, @_);
 
 	return $self->{cache}{$cacheKey} if exists $self->{cache}{$cacheKey};
 

@@ -15,7 +15,7 @@ use Badger::Class
 ;
 use XML::LibXML;
 use Rose::URI;
-use Digest::MD5 qw /md5_hex/;
+use Digest::SHA qw /sha1_hex/;
 use Redmine::KPI::Fetch;
 use Redmine::KPI::Config;
 use Redmine::KPI::Query::Factory;
@@ -30,9 +30,6 @@ sub init
 	$self->{config} = $config;
 	
 	$self->_setParamFromConfig($_) foreach($self->_paramsFromConfig());
-	
-	$self->{elemFactory}	= new Redmine::KPI::Element::Factory;
-	$self->{queryFactory}	= new Redmine::KPI::Query::Factory; 
 	
 	$self->customFields(new Redmine::KPI::Element::CustomFields);
 
@@ -96,22 +93,30 @@ sub query
 	$self->_parse() or $self->error("Couldn't parse data");
 
 }
+
 sub _elementFactory
 {
 	my $self = shift;
 	my $paramName = shift;
+	$self->{elementFactory}	= new Redmine::KPI::Element::Factory if not exists $self->{elementFactory};
 
-	$self->param($paramName, $self->{elemFactory}->element($paramName, 
+	my $cacheKey = sha1_hex($paramName, @_);
+
+	return $self->{elements}{$cacheKey} if exists $self->{elements}{$cacheKey};
+
+	$self->{elements}{$cacheKey} = $self->{elementFactory}->element($paramName, 
 		passConfigParams($self->{config}),
 		@_,
-	));
+	);
 }
 sub _queryFactory
 {
 	my $self = shift;
 	my $name = shift;
 	
-	my $cacheKey = md5_hex($name, @_);
+	$self->{queryFactory}	= new Redmine::KPI::Query::Factory if not exists $self->{queryFactory};
+
+	my $cacheKey = sha1_hex($name, @_);
 
 	return $self->{queries}{$cacheKey} if exists $self->{queries}{$cacheKey};
 	
@@ -128,10 +133,10 @@ sub _addStdParam
 
 	$paramName =~ s/_(.{0,1})/uc($1)/eg; #redmine snakecase to our camelcase
 
-	$self->_elementFactory($paramName,
+	$self->param($paramName,	$self->_elementFactory($paramName,
 		id	=> $self->{rootNode}->findvalue("$xmlParamName/\@id"),
 		name	=> $self->{rootNode}->findvalue("$xmlParamName/\@name"),
-	);
+	));
 }
 
 1;
