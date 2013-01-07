@@ -8,7 +8,6 @@ use Badger::Class
 	methods		=> {
 		_paramsFromConfig	=> sub { qw /id name/ },
 		_paramsToFetch		=> sub { [] },
-		_getUrl			=> sub {''},
 		_init			=> sub {1},
 		toHash			=> sub {shift->{param}},
 	},
@@ -34,9 +33,12 @@ sub init
 	$self->customFields(new Redmine::KPI::Element::CustomFields);
 
 	$self->{isFetched} = 0;
-
-	my $url = exists $self->{config}{url} ? $self->{config}{url} : '';
-	$self->{url} = Rose::URI->new($url.'/'.$self->_getUrl());
+	
+	if($self->can('_getUrl')) # initialize Rose::URI only if we need it (subclass has defined _getUrl)
+	{
+		my $url = exists $self->{config}{url} ? $self->{config}{url} : '';
+		$self->{url} = Rose::URI->new($url.'/'.$self->_getUrl());
+	}
 
 	$self->_init() or $self->fatal("Couldn't do class initialisation");
 
