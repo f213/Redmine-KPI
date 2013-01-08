@@ -16,7 +16,8 @@ sub fetch
 		default_expires => '600 sec',
 	);
 	
-	return $self->{cache}->get(sha1_hex($whatToFetch)) if($self->{cache}->exists(sha1_hex($whatToFetch)));
+	return $self->{cache}->get(sha1_hex($whatToFetch)) if($self->{cache}->exists(sha1_hex($whatToFetch)) and not (exists $param->{__noCache__} or exists $param->{__noFetchCache__}));
+
 	my $result;
 	if(ref($whatToFetch) eq 'Rose::URI')
 	{
@@ -38,7 +39,7 @@ sub fetch
 		$self->error("There is no such file: '$whatToFetch'") if not -e $whatToFetch;
 		$result = read_file($whatToFetch) or $self->error('Could not fetch file!', $whatToFetch);
 	}
-	$self->{cache}->set(sha1_hex($whatToFetch), $result);
+	$self->{cache}->set(sha1_hex($whatToFetch), $result) unless exists $param->{__noCache__} or exists $param->{__noFetchCache__};
 	return $result;
 }
 sub error

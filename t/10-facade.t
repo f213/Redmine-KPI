@@ -31,7 +31,7 @@ else
 	{
 		plan skip_all => "For running this test suite use 'make REAL_TESTS=1 test'";
 	}
-	plan tests => 7;
+	plan tests => 6;
 }
 chomp $url;
 chomp $auth_key;
@@ -77,16 +77,3 @@ ok(!$user->param('BadParamName'), 'nonexistant param name');
 
 $user = $k->user('Nonexistant');
 ok(!$user, 'nonexistant element');
-
-diag('Fetching for the first time');
-my $t = time();
-$user = $k->issue(1);
-my $timeout1 = time() - $t;
-
-diag('Fetching for the second time must be from cache');
-$t = time();
-$user = $k->issue(1);
-my $timeout2 = time() - $t;
-diag('Done');
-
-cmp_ok($timeout2 * 3, '<' , $timeout1, 'Cache');

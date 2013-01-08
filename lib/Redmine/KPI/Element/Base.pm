@@ -124,10 +124,11 @@ sub _elementFactory
 
 	return $self->{elements}{$cacheKey} if exists $self->{elements}{$cacheKey};
 
-	$self->{elements}{$cacheKey} = $self->{elementFactory}->element($paramName, 
+	my $el = $self->{elementFactory}->element($paramName, 
 		passConfigParams($self->{config}),
 		@_,
 	);
+	$self->{elements}{$cacheKey} = $el if not exists $self->{config}{__noElementCache__} and not exists $self->{config}{__noCache__};
 }
 sub _queryFactory
 {
@@ -140,10 +141,12 @@ sub _queryFactory
 
 	return $self->{queries}{$cacheKey} if exists $self->{queries}{$cacheKey};
 	
-	$self->{queries}{$cacheKey} = $self->{queryFactory}->query($name, 
+	my $q = $self->{queryFactory}->query($name, 
 		passConfigParams($self->{config}),
 		@_,
 	);
+	$self->{queries}{$cacheKey} = $q if not exists $self->{config}{__noQueryCache__} and not exists $self->{config}{__noCache__};
+	$q;
 }
 sub _addStdParam
 {

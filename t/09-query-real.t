@@ -9,16 +9,15 @@ use Class::Date qw /date/;
 our $TEST_TASK_ID = 3324;
 our $TEST_PRJ_ID = 1;
 
-our ($url, $auth_key, $query_id);
+our ($url, $auth_key);
 eval 
 {
 	$url        = read_file ('./t/real_auth_data/url');
 	$auth_key   = read_file ('./t/real_auth_data/auth_key');
-	$query_id   = read_file ('./t/real_auth_data/query_id');
 };
 
 
-if ( not $url or not $auth_key or not $query_id)
+if ( not $url or not $auth_key)
 {
 	plan skip_all => 'This tests need real auth data';
 }
@@ -28,11 +27,10 @@ else
 	{
 		plan skip_all => "For running this test suite use 'make REAL_TESTS=1 test'";
 	}
-	plan tests => 20;
+	plan tests => 17;
 }
 chomp $url;
 chomp $auth_key;
-chomp $query_id;
 
 use Redmine::KPI::Query::Trackers;
 
@@ -108,27 +106,7 @@ my $p = Redmine::KPI::Query::Projects->new(
 is(ref($p->list->{$TEST_PRJ_ID}), 'Redmine::KPI::Element::Project', 'Fetching projects');
 
 $p = $p->list->{$TEST_PRJ_ID};
-my $t = time();
-diag('Fetching time entries for the first time');
-is(ref($p->timeEntries), 'Redmine::KPI::Query::TimeEntries', 'Fetching project time entries');
-diag('done');
-my $timeout1 = time() - $t;
 
-$t = time();
-diag('Fetching time entries for the second time');
-my $t1 = $p->timeEntries;
-diag('done');
-diag('Fetching time entries for the third time');
-my $t2 = $p->timeEntries;
-diag('done');
-my $timeout2 = time() - $t;
-
-TODO:
-{
-	local $TODO =  'May be it doesnt work because of overloading';
-	cmp_ok(\$t1, 'eq', \$t2, 'Building child queries is singleton-like'); #TODO move this test to other file, make it work without auth data
-}
-cmp_ok($timeout2 * 3, '<' , $timeout1, 'While getting child query we do not process it two times'); 
 
 cmp_ok($p->timeEntries->totalTime, '>', 0, 'Fetching total time count for project');
 
