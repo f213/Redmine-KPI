@@ -324,7 +324,7 @@ sub _addCustomFields
 
 	foreach($node->findnodes('custom_fields/custom_field'))
 	{
-		$self->{list}{$id}->customFields->add(
+		$self->{list}{$id}->customFieldsAdd(
 			id	=> $_->getAttribute('id'),
 			name	=> $_->getAttribute('name'),
 			value	=> $_->findvalue('value'),

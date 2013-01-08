@@ -3,7 +3,6 @@ use utf8;
 use Badger::Class
 	base 		=> 'Badger::Base',
 	accessors 	=> 'raw',
-	mutators	=> 'customFields',
 	methods		=> {
 		_paramsFromConfig	=> sub { qw /id name/ },
 		_paramsToFetch		=> sub { [] },
@@ -29,8 +28,6 @@ sub init
 	
 	$self->_setParamFromConfig($_) foreach($self->_paramsFromConfig());
 	
-	$self->customFields(new Redmine::KPI::Element::CustomFields); # TODO - custom fields from element itself, not from query
-
 	$self->{isFetched} = 0;
 	
 	if($self->can('_getUrl')) # initialize Rose::URI only if we need it (subclass has defined _getUrl)
@@ -92,8 +89,29 @@ sub query
 
 	$self->{isFetched} = $self->fetch() or $self->error("Couldn't get data");
 	$self->{xml} = XML::LibXML->load_xml( string => $self->raw) or $self->error("Couldn't parse xml");
-	$self->_parse() or $self->error("Couldn't parse data");
+	$self->_parse() or $self->error("Couldn't parse data"); # subclass must define $self->{rootNode} here
+	$self->_parseCustomFields();
 
+}
+
+sub customFields
+{ # this method is commonly used for fetching custom field data. For creating new customfields one must use customFieldAdd
+	my $self = shift;
+	
+	if(not exists $self->{customFields})
+	{
+		$self->{customFields} = new Redmine::KPI::Element::CustomFields;
+		$self->query if not $self->{isFetched};
+	}
+	$self->{customFields};
+}
+
+sub customFieldsAdd
+{
+	my $self = shift;
+	
+	$self->{customFields} = new Redmine::KPI::Element::CustomFields if not exists $self->{customFields};
+	$self->{customFields}->add(@_);
 }
 
 sub _elementFactory
@@ -141,4 +159,17 @@ sub _addStdParam
 	));
 }
 
+sub _parseCustomFields
+{
+	my $self = shift;
+
+	foreach($self->{rootNode}->findnodes('custom_fields/custom_field'))
+	{
+		$self->customFieldsAdd(
+			id	=> $_->getAttribute('id'),
+			name	=> $_->getAttribute('name'),
+			value	=> $_->findvalue('value'),
+		);
+	}
+}
 1;

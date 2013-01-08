@@ -28,7 +28,7 @@ else
 	{
 		plan skip_all => "For running this test suite use 'make REAL_TESTS=1 test'";
 	}
-	plan tests => 19;
+	plan tests => 20;
 }
 chomp $url;
 chomp $auth_key;
@@ -214,3 +214,4 @@ $q = Redmine::KPI::Query::Issues->new(
 
 is($q->list->{$TEST_TASK_ID}->cost, 123*1.5, 'Check if task can count its own cost, plus check costProvider by trackers');
 
+is($q->list->{$TEST_TASK_ID}->param('assignedTo')->customFields->getValue('Исполнитель задач'), 1, 'Check if customfields can be got from element itslef, not from query');
