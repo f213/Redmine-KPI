@@ -6,7 +6,7 @@ use Badger::Class
 		_nodesName	=> sub {'time_entries/time_entry'},
 		_elemName	=> sub {'timeEntry'},
 		_limit		=> sub {1000},
-		_stdFilters	=> sub {qw/tracker project issue activity user/},
+		_stdFilters	=> sub {qw/tracker project issue activity /},
 		_stdParams	=> sub {qw/project issue user activity/},
 	},
 ;
@@ -74,6 +74,24 @@ sub _init
 			);
 		}
 
+	}
+	if(exists $self->{config}{user})
+	{
+		my $user = $self->{config}{user};
+		if($user =~ /^\d+$/)
+		{
+			$self->_addFilter(
+				local	=> 'user/id',
+				value	=> $user,
+			);
+		}
+		else
+		{
+			$self->_addFilter(
+				local	=> 'user/name',
+				value	=> $user,
+			);
+		}
 	}
 	1;
 }
