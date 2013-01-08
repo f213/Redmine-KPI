@@ -4,11 +4,20 @@ use File::Slurp;
 use Carp;
 require Crypt::SSLeay;
 require IO::Socket::SSL;
+use Cache::Memory;
+use Digest::SHA qw /sha1_hex/;
 #TODO - totaly rewrite this from scratch!
 sub fetch
 {
 	(my $self, my $whatToFetch, my $apiKey, my $param) = @_;
 	
+	$self->{cache} = Cache::Memory->new(
+		namespace	=> 'Redmine::KPI::Fetcher',
+		default_expires => '600 sec',
+	);
+	
+	return $self->{cache}->get(sha1_hex($whatToFetch)) if($self->{cache}->exists(sha1_hex($whatToFetch)));
+	my $result;
 	if(ref($whatToFetch) eq 'Rose::URI')
 	{
 		confess('we need authKey param') if not $apiKey or not length $apiKey;
@@ -22,14 +31,15 @@ sub fetch
 
 		my $r = $ua->get($whatToFetch->as_string);
 		$self->error($r->status_line, $whatToFetch) if($r->is_error);
-		return $r->content;
+		$result = $r->content;
 	}
 	else
 	{
 		$self->error("There is no such file: '$whatToFetch'") if not -e $whatToFetch;
-		my $f = read_file($whatToFetch) or $self->error('Could not fetch file!', $whatToFetch);
-		return $f;
+		$result = read_file($whatToFetch) or $self->error('Could not fetch file!', $whatToFetch);
 	}
+	$self->{cache}->set(sha1_hex($whatToFetch), $result);
+	return $result;
 }
 sub error
 {

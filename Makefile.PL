@@ -22,6 +22,7 @@ WriteMakefile(
 	'LWP::UserAgent'	=> 0,
 	'Crypt::SSLeay'		=> 0,
 	'Digest::SHA'		=> 0,
+	'Cache::Memory'		=> 0,
     },
     dist                => { COMPRESS => 'gzip -9f', SUFFIX => 'gz', },
     clean               => { FILES => 'Redmine-KPI-*' },
