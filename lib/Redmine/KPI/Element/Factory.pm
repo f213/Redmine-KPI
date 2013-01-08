@@ -12,9 +12,9 @@ our $ELEMENT_DEFAULT	= 'Std';
 our $ELEMENT_NAMES = {
 	author		=> 'User',
 	assignedTo	=> 'User',
-	priority	=> 'Std',
-	tracker		=> 'Std',
-	status		=> 'Std',
+	priority	=> 'Base',
+	tracker		=> 'Base',
+	status		=> 'Base',
 	changeset	=> 'ChangeSet',
 };
 
