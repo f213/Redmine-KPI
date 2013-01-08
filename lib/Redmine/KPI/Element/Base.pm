@@ -1,6 +1,5 @@
 package Redmine::KPI::Element::Base;
 use utf8;
-use Encode;
 use Badger::Class
 	base 		=> 'Badger::Base',
 	accessors 	=> 'raw',
