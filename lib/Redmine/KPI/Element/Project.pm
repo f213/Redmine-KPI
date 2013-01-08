@@ -8,7 +8,7 @@ use Badger::Class
 ;
 
 sub cost
-{ # TODO WRITE A TEST FOR THAT!
+{
 	my $self = shift;
 
 	$self->timeEntries(@_)->cost;
