@@ -22,11 +22,11 @@ sub _parse
 	
 	($self->{rootNode}) = $self->{xml}->findnodes('user');
 	
-	$self->__addStdParam($_) foreach qw /login firstname lastname mail/;
+	$self->__addStdTextParam($_) foreach qw /login firstname lastname mail/;
 	1;
 }
 
-sub __addStdParam
+sub __addStdTextParam
 {
 	(my $self, my $param) = @_;
 	
