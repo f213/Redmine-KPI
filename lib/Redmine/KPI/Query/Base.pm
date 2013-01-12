@@ -57,6 +57,8 @@ sub init
 
 	$self->_init() or $self->error("Couldn't do class initialisation");
 	
+	$self->_checkForConfigList;
+
 	if((not exists $self->{config}{dryRun} or not $self->{config}{dryRun}) and (not exists $self->{dryRun} or not $self->{dryRun})) #{config}{dryRun} is set by user (e.g. for testing) and {dryRun} we set ourselves
 	{
 		$self->query()
@@ -142,6 +144,27 @@ sub filter
 		}
 	}
 	$self->_filterList();
+}
+sub _checkForConfigList
+{
+	my $self = shift;
+
+	if(exists $self->{config}{$self->_elemName}) # if we've got issue list, then we just dont do _query(), but insert issues into the list ourselves.
+	{
+		if(ref($self->{config}{$self->_elemName}) eq 'ARRAY')
+		{
+			foreach(@{ $self->{config}{$self->_elemName} })
+			{
+				$self->{list}{$_} = $self->_elementFactory($self->_elemName,
+					id	=> $_,
+				);
+			}
+
+			$self->{dryRun} = 1; # _query() will not be done
+
+			$self->_updateCount();
+		}
+	}
 }
 
 sub _fetch
