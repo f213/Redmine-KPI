@@ -70,6 +70,13 @@ sub init
 sub query
 {
 	my $self = shift;
+
+	if($self->count and exists $self->{config}{$self->_elemName}) # when we got elements from user, we must not fetch them ourselves. Instead of that we will try to fetch data for those elements
+	{
+		$self->{list}{$_}->query foreach (keys %{ $self->{list} });
+		return 1;
+	}
+
 	$self->_fetch() or $self->error("Couldn't get data");
 
 	$self->fatal('There is no raw xml data!') if not $self->raw;

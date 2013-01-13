@@ -27,7 +27,7 @@ else
 	{
 		plan skip_all => "For running this test suite use 'make REAL_TESTS=1 test'";
 	}
-	plan tests => 17;
+	plan tests => 19;
 }
 chomp $url;
 chomp $auth_key;
@@ -42,6 +42,18 @@ my $q = Redmine::KPI::Query::Trackers->new(
 ok($q->count > 0, 'Fetching remote trackers data');
 
 use Redmine::KPI::Query::Issues;
+
+$q = Redmine::KPI::Query::Issues->new(
+	url		=> $url,
+	authKey		=> $auth_key,
+	noVerifyHost	=> 1,
+	issue		=> [1,2,3,4],
+);
+$q->query;
+
+is($q->count, 4, 'Result count in query did not change after actual query');
+isa_ok($q->list->{1}->param('author'), 'Redmine::KPI::Element::User', 'And data from those elements is fetched');
+
 
 $q = Redmine::KPI::Query::Issues->new(
 	url		=> $url,
