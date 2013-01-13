@@ -3,7 +3,7 @@ use Badger::Class
 	base 	=> 'Redmine::KPI::Element::Base',
 	methods	=> {
 		_paramsToFetch		=> sub { qw /login firstname lastname mail/ },
-		_paramsFromConfig	=> sub { qw /id name login firstname lastname mail/ },
+		_paramsFromConfig	=> sub { qw /id name login firstname lastname mail admin/ }, # TODO - may be fetch 'admin' param somehow
 		timeEntries		=> sub { shift->__queryFactory('timeEntries', @_) },
 		issues			=> sub { my $self = shift; $self->_queryFactory('issues', author => $self->param('id'), @_) },
 	},
