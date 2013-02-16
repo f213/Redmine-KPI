@@ -27,7 +27,7 @@ else
 	{
 		plan skip_all => "For running this test suite use 'make REAL_TESTS=1 test'";
 	}
-	plan tests => 19;
+	plan tests => 18;
 }
 chomp $url;
 chomp $auth_key;
@@ -88,10 +88,11 @@ $q = Redmine::KPI::Query::Issues->new(
 	authKey		=> $auth_key,
 	project		=> 1,
 	noVerifyHost	=> 1,
+	limit		=> 5000,
 );
 
 my $i = $q->list->{$TEST_TASK_ID};
-is(ref($i), 'Redmine::KPI::Element::Issue', 'Got correct issue class in real env');
+isa_ok($i, 'Redmine::KPI::Element::Issue', 'Got correct issue class in real env');
 is($i->param('priority')->param('name'), 'Средний', 'Fetching remote parameter (priority)');
 
 is($i->param('author')->param('login'), 'NikitaMelnikov', 'Fetching remote user login');
@@ -115,7 +116,7 @@ my $p = Redmine::KPI::Query::Projects->new(
 	noVerifyHost	=> 1,
 );
 
-is(ref($p->list->{$TEST_PRJ_ID}), 'Redmine::KPI::Element::Project', 'Fetching projects');
+isa_ok($p->list->{$TEST_PRJ_ID}, 'Redmine::KPI::Element::Project', 'Fetching projects');
 
 $p = $p->list->{$TEST_PRJ_ID};
 
@@ -159,23 +160,13 @@ is($p->timeEntries(period => ['2012-12-04', '2012-12-05'])->totalTime, $totalTim
 use Redmine::KPI::Element::User;
 
 my $u = Redmine::KPI::Element::User->new(
-	id	=> 6,
-	url	=> $url,
-	authKey	=> $auth_key,
-	noVerifyHost	=> 1,
-);
-
-is($u->timeEntries(period => '2012-12-17')->totalTime, 7.15, 'Fetching user time activity by day');
-
-undef $u;
-$u = Redmine::KPI::Element::User->new(
 	id	=> 14,
 	url	=> $url,
 	authKey	=> $auth_key,
 	noVerifyHost	=> 1,
 );
 
-is($u->issues(period => ['2012-12-12', '2012-12-18'])->count, 25, 'Fetching user-created issues by period');
+is($u->issues(period => ['2012-12-12', '2012-12-18'])->count, 24, 'Fetching user-created issues by period');
 diag($u->issues->{url});
 
 $i = Redmine::KPI::Element::Issue->new(
@@ -200,6 +191,7 @@ $q = Redmine::KPI::Query::Issues->new(
 			'bUg'	=> 1.5,
 		},
 	),
+	limit		=> 5000,
 );
 
 is($q->list->{$TEST_TASK_ID}->cost, 123*1.5, 'Check if task can count its own cost, plus check costProvider by trackers');
