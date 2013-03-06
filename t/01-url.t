@@ -10,7 +10,7 @@ my $q = Redmine::KPI::Query::Projects->new(
 	dryRun	=> 1,
 );
 
-is($q->{url}, '/projects.xml?limit=100', 'Autosetting url in query children');
+is($q->{url}, '/projects.xml?limit=1000', 'Autosetting url in query children');
 
 use Redmine::KPI::Query::TimeEntries;
 
@@ -36,4 +36,4 @@ $i = Redmine::KPI::Query::Issues->new(
 	url	=> 'https://redmine.shogo.ru',
 	dryRun	=> 1,
 );
-is($i->{url}->as_string, 'https://redmine.shogo.ru/issues.xml?limit=100&status_id=%2A', 'Autosetting issues query url');
+is($i->{url}->as_string, 'https://redmine.shogo.ru/issues.xml?limit=1000&status_id=%2A', 'Autosetting issues query url');

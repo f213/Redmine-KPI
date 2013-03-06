@@ -10,7 +10,7 @@ use Badger::Class
 		_nodesName	=> sub {''},		# xml node names. Every subclass must define it
 		_elemName	=> sub {''},		# name of result Element from Redmine::KPI::Element. Bunch of that eleents is all what we produce:)
 		_init		=> sub {1},		# custom subclass initialisation: custom filters, query params etc.
-		_limit		=> sub {100},		# custom subclass query limit, might be more than 100, e.g. for TimeEntries. NOTE - needs modifications in redmine core
+		_limit		=> sub {1000},		# custom subclass query limit, might be more than 100, e.g. for TimeEntries. NOTE - needs modifications in redmine core
 		_updateList	=> sub {1},		# subclass method to add custom parameters from xml. Every subclass that need non-std parameters must fetch them in this method
 		_stdFilters	=> sub {()},		# subclass method to add custom filters. stdFilter is a filter for an xml tag like '<something name = "name" id = 1>".
 		_stdParams	=> sub {()},		# subclass method to add custom standard parameters. stdParam is some Element:: instance with two parameters - id and name, which is added as a ->param to elements which we produce
