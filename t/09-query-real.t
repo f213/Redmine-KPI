@@ -8,6 +8,7 @@ use Class::Date qw /date/;
 
 our $TEST_TASK_ID = 3324;
 our $TEST_PRJ_ID = 1;
+our $TEST_TRACKER_ID = 1;
 
 our ($url, $auth_key);
 eval 
@@ -27,7 +28,7 @@ else
 	{
 		plan skip_all => "For running this test suite use 'make REAL_TESTS=1 test'";
 	}
-	plan tests => 18;
+	plan tests => 21;
 }
 chomp $url;
 chomp $auth_key;
@@ -195,5 +196,27 @@ $q = Redmine::KPI::Query::Issues->new(
 );
 
 is($q->list->{$TEST_TASK_ID}->cost, 123*1.5, 'Check if task can count its own cost, plus check costProvider by trackers');
-
 is($q->list->{$TEST_TASK_ID}->param('assignedTo')->customFields->getValue('Исполнитель задач'), 1, 'Check if customfields can be got from element itslef, not from query');
+
+use Redmine::KPI::Query::Trackers;
+
+my $t = Redmine::KPI::Query::Trackers->new(
+	url             => $url,
+	authKey         => $auth_key,
+	noVerifyHost    => 1,
+);
+
+my $tracker = $t->{list}->{$TEST_TRACKER_ID};
+
+isa_ok($tracker, 'Redmine::KPI::Element::Tracker', 'Fetching tracker');
+
+my $tl = $tracker->issues;
+
+isa_ok($tl, 'Redmine::KPI::Query::Issues');
+
+
+my $task = pop @{$tl};
+
+is($task->param('tracker')->param('id'), $TEST_TRACKER_ID, 'Fetching task by tracker');
+
+

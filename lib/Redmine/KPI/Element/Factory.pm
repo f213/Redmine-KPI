@@ -13,7 +13,6 @@ our $ELEMENT_NAMES = {
 	author		=> 'User',
 	assignedTo	=> 'User',
 	priority	=> 'Base',
-	tracker		=> 'Base',
 	status		=> 'Base',
 	changeset	=> 'ChangeSet',
 };
