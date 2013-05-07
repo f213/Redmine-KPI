@@ -31,7 +31,7 @@ else
 	{
 		plan skip_all => "For running this test suite use 'make REAL_TESTS=1 test'";
 	}
-	plan tests => 6;
+	plan tests => 7;
 }
 chomp $url;
 chomp $auth_key;
@@ -77,3 +77,11 @@ ok(!$user->param('BadParamName'), 'nonexistant param name');
 
 $user = $k->user('Nonexistant');
 ok(!$user, 'nonexistant element');
+
+#may be bug? $kpi->timeEntries and costProvider
+
+my $costProvider = new Redmine::KPI::CostProvider;
+
+my $timeEntries = $k->projects(costProvider => $costProvider);
+isa_ok($timeEntries->{config}{costProvider}, 'Redmine::KPI::CostProvider', 'Redmine::KPI->timeEntries passes costProvider param');
+

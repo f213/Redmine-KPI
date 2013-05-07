@@ -12,6 +12,7 @@ use Badger::Class
 		trackers	=> sub {shift->somewhats	('trackers',	@_)},
 		project		=> sub {shift->somewhat		('projects',	@_)},
 		projects	=> sub {shift->somewhats	('projects',	@_)},
+		timeEntries	=> sub {shift->somewhats	('timeEntries',	@_)},
 	},
 ;
 use Redmine::KPI::Query::Factory;
@@ -57,7 +58,7 @@ sub somewhats
 
 	return $self->{cache}{$cacheKey} if exists $self->{cache}{$cacheKey};
 
-	$self->{cache}{$cacheKey} = $self->_queryFactory->query($name, passConfigParams($self->{config}, @_));
+	$self->{cache}{$cacheKey} = $self->_queryFactory->query($name, passConfigParams($self->{config}), @_);
 }
 sub costProvider
 {

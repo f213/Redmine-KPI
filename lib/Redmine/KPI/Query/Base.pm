@@ -228,8 +228,11 @@ sub _filterList
 			my @chain = split /\//; #recursively going inside parameters
 
 			my $currentVal = $self->{list}{$id}->param(shift @chain); #first param. and may be the last. If the last, then overloading must begin to work, but i dont know what will happen, so please dont do that!
-			$currentVal = $currentVal->param($_)
-				foreach(@chain);
+
+			foreach(@chain)
+			{
+				$currentVal = $currentVal->param($_) or next;
+			}
 
 			next if not $currentVal;
 			
