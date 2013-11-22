@@ -92,6 +92,9 @@ $q = Redmine::KPI::Query::Issues->new(
 	limit		=> 5000,
 );
 
+# the next test is first to fail when redmine core is not modificated as described at http://search.cpan.org/~fborshev/Redmine-Stat-0.01/lib/Redmine/Stat.pm#DESCRIPTION and your $TEST_TASK_ID is too far from the end of the task list
+
+# TODO - make a test to check if redmine core has modifications
 my $i = $q->list->{$TEST_TASK_ID};
 isa_ok($i, 'Redmine::KPI::Element::Issue', 'Got correct issue class in real env');
 is($i->param('priority')->param('name'), 'Средний', 'Fetching remote parameter (priority)');
